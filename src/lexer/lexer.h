@@ -13,8 +13,14 @@ namespace cerberus {
         ~Lexer();
 
         /**
-         * Recebe um determinado código como entrada, realiza a sua leitura,
-         * e retorna uma lista com os tokens obtidos
+         * Caso a lista de tokens esteja vazia, realiza a leitura do código fonte para a obtenção
+         * destes, e retorna a lista. Caso não esteja vazia, retorna a lista no estado em que está
+         */
+        std::vector<Token> tokens();
+
+        /**
+         * Limpa a lista de tokens, e faz todo o processo de leitura de tokens a partir do fonte
+         * fornecido na construção da classe
          */
         std::vector<Token> tokenize();
 
@@ -47,12 +53,29 @@ namespace cerberus {
          */
         bool ended();
 
+        /**
+         * Adiciona um Token na lista de tokens
+         */
+        Token add_token(TokenType tokenType);
+        Token add_token(TokenType tokenType, std::string lexeme);
+
+        /**
+         * Limpa a lista de tokens
+         */
+        void clear_tokens();
+
+        /**
+         * Aumenta em 1 o contador de linhas do código fonte, e zera o contador de colunas
+         */
+        void newline();
+
         std::string _source;
         std::vector<Token> _tokens;
         
         size_t _source_size;
         unsigned int _current;
         unsigned int _line;
+        unsigned int _col;
     };
 }
 

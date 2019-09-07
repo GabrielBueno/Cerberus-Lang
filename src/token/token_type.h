@@ -7,18 +7,18 @@ namespace cerberus {
         LEFT_PAREN, RIGHT_PAREN,                   // ()
         LEFT_CURLY_BRACE, RIGHT_CURLY_BRACE,       // {}
         LEFT_SQUARE_BRACKET, RIGHT_SQUARE_BRACKET, // []
-        COMMA, DOT, SEMICOLON,                     // , . ;
-        AMPERSAND, HASHTAG,                        // & #
+        COMMA, DOT,         // , .
+        SEMICOLON, HASHTAG, // ; #
 
         /* --- Operadores aritméticos --- */
         PLUS, MINUS, // + -
         SLASH, STAR, // / *
 
         /* --- Operadores lógicos --- */
-        BANG, BANG_EQUAL,       // ! !=
+        NOT, NOT_EQUAL,         // ! !=
         EQUAL, EQUAL_EQUAL,     // = ==
         GREATER, GREATER_EQUAL, // > >=
-        LESS, LESS_EQUAL,       // < <=
+        LESSER, LESSER_EQUAL,   // < <=
         AND, OR, XOR,           // && || ^^
 
         /* --- Operadores bit a bit --- */
