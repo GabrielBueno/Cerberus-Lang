@@ -8,7 +8,7 @@ namespace cerberus {
         LEFT_CURLY_BRACE, RIGHT_CURLY_BRACE,       // {}
         LEFT_SQUARE_BRACKET, RIGHT_SQUARE_BRACKET, // []
         COMMA, DOT, SEMICOLON,                     // , . ;
-        AMPERSAND,                                 // &
+        AMPERSAND, HASHTAG,                        // & #
 
         /* --- Operadores aritméticos --- */
         PLUS, MINUS, // + -
@@ -48,6 +48,8 @@ namespace cerberus {
         // Estruturas de dados, e orientação a objetos
         STRUCT, CLASS, 
         SUPER, THIS, 
-        NEW 
+        NEW,
+
+        END_OF_FILE, NO_TYPE
     };
 }
