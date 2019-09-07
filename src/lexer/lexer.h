@@ -24,6 +24,11 @@ namespace cerberus {
          */
         std::vector<Token> tokenize();
 
+        /**
+         * Exibe na saída os tokens lidos
+         */
+        void show_tokens();
+
     private:
         /**
          * Retorna e consome o caracter sendo lido atualmente

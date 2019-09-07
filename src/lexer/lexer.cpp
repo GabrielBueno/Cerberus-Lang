@@ -115,6 +115,14 @@ namespace cerberus {
         return _tokens;
     }
 
+    void Lexer::show_tokens() {
+        for (unsigned int i = 0; i < _tokens.size(); i++) {
+            Token token = _tokens.at(i);
+
+            fprintf(stdout, "(%d, %s)\n", token.type(), token.lexeme().c_str());
+        }
+    }
+
     /* --- Métodos privados --- */
     char Lexer::move() {
         if (ended())
@@ -153,7 +161,7 @@ namespace cerberus {
     }
 
     Token Lexer::add_token(TokenType type) {
-        Token token = Token(type, nullptr);
+        Token token = Token(type, "");
 
         token.in_col(_col);
         token.in_line(_line);
