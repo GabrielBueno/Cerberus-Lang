@@ -1,6 +1,7 @@
 #include "lexer.h"
 
 #include <cstdio>
+#include <sstream>
 
 namespace cerberus {
     Lexer::Lexer(std::string source) : 
@@ -26,9 +27,9 @@ namespace cerberus {
         clear_tokens();
 
         while (!ended()) {
-            char current_character = move();
+            char current_ch = move();
 
-            switch (current_character) {
+            switch (current_ch) {
                 case ' ':
                 case '\t':
                 case '\r':
@@ -103,16 +104,33 @@ namespace cerberus {
 
                 case '~': add_token(BITWISE_NOT); break;
 
-                /* Palavras reservadas */
+                case '"':
+                    add_token(STRING_LITERAL, read_until_find('"'));
 
-                /* Identificadores, string, e números */
+                    // Consome o último "
+                    move();
+                    break;
 
                 default:
-                    fprintf(stderr, "Unexpected %c in line %d column %d.\n\n", current_character, _line, _col);
+                    // Valores numéricos
+                    if (is_numeric(current_ch))
+                        add_token(NUMBER, read_number());
+                    else if (is_alpha(current_ch))
+                        add_token(read_identifier());
+                    else
+                        fprintf(stderr, "Unexpected %c in line %d column %d.\n\n", current_ch, _line, _col);
             }
         }
 
         return _tokens;
+    }
+
+    bool Lexer::has_errors() {
+        return !_errors.empty();
+    }
+
+    std::vector<std::string> Lexer::errors() {
+        return _errors;
     }
 
     void Lexer::show_tokens() {
@@ -156,8 +174,40 @@ namespace cerberus {
         return matched;
     }
 
+    std::string Lexer::read_until_find(char expected) {
+        std::string result = "";
+
+        for (char peeked_char = peek(); peeked_char != expected; move()) {
+            if (ended()) {
+                add_error("Unterminated string started", true);
+                break;
+            }
+
+            result += peeked_char;
+        }
+
+        return result;
+    }
+
+    std::string Lexer::read_number() {
+        return "";
+    }
+
+    Token Lexer::read_identifier() {
+        return Token(NO_TYPE, "");
+    }
+
     bool Lexer::ended() {
         return _current >= _source_size;
+    }
+
+    Token Lexer::add_token(Token token) {
+        token.in_col(_col);
+        token.in_line(_line);
+
+        _tokens.push_back(token);
+
+        return token;
     }
 
     Token Lexer::add_token(TokenType type) {
@@ -189,5 +239,54 @@ namespace cerberus {
     void Lexer::newline() {
         _line += 1;
         _col   = 0;
+    }
+
+    bool Lexer::is_numeric(char ch) {
+        return ch >= '0' && ch <= '9';
+    }
+
+    bool Lexer::is_alpha(char ch) {
+        return ch == '_' || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+    }
+
+    bool Lexer::is_alphanumeric(char ch) {
+        return is_alpha(ch) || is_numeric(ch);
+    }
+
+    void Lexer::add_error(std::string error) {
+        std::stringstream sstream;
+
+        sstream << "Error: " << error << "\n\n";
+
+        _errors.push_back(sstream.str());
+    }
+
+    void Lexer::add_error(std::string error, bool show_line) {
+        std::stringstream sstream;
+
+        sstream << "Error: " << error;
+
+        if (show_line)
+            sstream << " in line " << _line;
+
+        sstream << "\n\n";
+
+        _errors.push_back(sstream.str());
+    }
+
+    void Lexer::add_error(std::string error, bool show_line, bool show_column) {
+        std::stringstream sstream;
+
+        sstream << error;
+
+        if (show_line)
+            sstream << " in line " << _line;
+
+        if (show_column)
+            sstream << " in column " << _col;
+
+        sstream << "\n\n";
+
+        _errors.push_back(sstream.str());
     }
 }

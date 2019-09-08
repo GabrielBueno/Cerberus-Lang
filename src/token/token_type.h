@@ -27,7 +27,7 @@ namespace cerberus {
         LEFT_SHIFT,  RIGHT_SHIFT, // << >>
 
         /* --- Identificadores, cadeias de caracteres, e valores numéricos --- */
-        IDENTIFIER, STRING, NUMBER,
+        IDENTIFIER, STRING_LITERAL, CHAR_LITERAL, NUMBER,
 
         /* --- Palavras reservadas --- */
         TRUE, FALSE, // Valores lógicos
