@@ -3,6 +3,7 @@
 #include <string>
 
 namespace cerberus {
+    Token::Token(TokenType type) : _type(type) {}
     Token::Token(TokenType type, std::string lexeme) : _type(type), _lexeme(lexeme) {}
 
     Token::~Token() {}

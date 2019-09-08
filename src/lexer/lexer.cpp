@@ -11,6 +11,7 @@ namespace cerberus {
         _line(1),
         _col(0)
     {
+        load_reserved_keywords();
     }
 
     Lexer::~Lexer() {}
@@ -114,9 +115,9 @@ namespace cerberus {
                 default:
                     // Valores numéricos
                     if (is_numeric(current_ch))
-                        add_token(NUMBER, read_number());
+                        add_token(read_number(current_ch));
                     else if (is_alpha(current_ch))
-                        add_token(read_identifier());
+                        add_token(read_identifier(current_ch));
                     else
                         fprintf(stderr, "Unexpected %c in line %d column %d.\n\n", current_ch, _line, _col);
             }
@@ -142,6 +143,7 @@ namespace cerberus {
     }
 
     /* --- Métodos privados --- */
+
     char Lexer::move() {
         if (ended())
             return '\0';
@@ -175,7 +177,7 @@ namespace cerberus {
     }
 
     std::string Lexer::read_until_find(char expected) {
-        std::string result = "";
+        std::stringstream result_sstream;
 
         for (char peeked_char = peek(); peeked_char != expected; move()) {
             if (ended()) {
@@ -183,18 +185,56 @@ namespace cerberus {
                 break;
             }
 
-            result += peeked_char;
+            result_sstream << peeked_char;
         }
 
-        return result;
+        return result_sstream.str();
     }
 
-    std::string Lexer::read_number() {
-        return "";
+    Token Lexer::read_number() {
+        std::stringstream number_sstream;
+        bool readed_decimal_separator = false;
+
+        for (char peeked = peek(); is_numeric(peeked) || peeked == '.'; move()) {
+            if (peeked == '.' && readed_decimal_separator) {
+                add_error("Invalid decimal literal", true, true);
+                break;
+            }
+
+            if (peeked == '.' && !readed_decimal_separator)
+                readed_decimal_separator = true;
+
+            number_sstream << peeked;
+        }
+
+        return readed_decimal_separator ? Token(DOUBLE_LITERAL, number_sstream.str()) : Token(INTEGER_LITERAL, number_sstream.str());
     }
 
-    Token Lexer::read_identifier() {
-        return Token(NO_TYPE, "");
+    /**
+     * Lê um número na entrada, adicionando algum digito que o precede no começo do 
+     * lexema
+     */
+    Token Lexer::read_number(char preceded_digit) {
+        Token number = read_number();
+
+        return Token(number.type(), preceded_digit + number.lexeme());
+    }
+
+    Token Lexer::read_identifier(char preceded_by) {
+        std::stringstream identifier_sstream;
+        std::string identifier;
+        std::unique_ptr<Token> reserved_token_ptr;
+
+        identifier_sstream << preceded_by;
+
+        for (char peeked = peek(); is_alphanumeric(peeked); move()) 
+            identifier_sstream << peeked;
+
+        identifier = identifier_sstream.str();
+
+        // Caso exista uma chave com o identifier obtido, dereferencia o ponteiro para o Token correspondente e o retorna.
+        // Caso contrário, monta o Token com o identifier obtido
+        return _reserved_keywords[identifier] ? *_reserved_keywords[identifier] : Token(IDENTIFIER, identifier);
     }
 
     bool Lexer::ended() {
@@ -288,5 +328,41 @@ namespace cerberus {
         sstream << "\n\n";
 
         _errors.push_back(sstream.str());
+    }
+
+    void Lexer::load_reserved_keywords() {
+        _reserved_keywords["true"]   = std::make_unique<Token>(TRUE);
+        _reserved_keywords["false"]  = std::make_unique<Token>(FALSE);
+        _reserved_keywords["null"]   = std::make_unique<Token>(NULL_VALUE);
+
+        _reserved_keywords["let"]    = std::make_unique<Token>(LET);
+        _reserved_keywords["const"]  = std::make_unique<Token>(CONST);
+        _reserved_keywords["func"]   = std::make_unique<Token>(FUNC);
+        _reserved_keywords["if"]     = std::make_unique<Token>(IF);
+        _reserved_keywords["else"]   = std::make_unique<Token>(ELSE);
+        _reserved_keywords["elif"]   = std::make_unique<Token>(ELIF);
+        _reserved_keywords["while"]  = std::make_unique<Token>(WHILE);
+        _reserved_keywords["for"]    = std::make_unique<Token>(FOR);
+
+        _reserved_keywords["int"]    = std::make_unique<Token>(INT);
+        _reserved_keywords["uint"]   = std::make_unique<Token>(UINT);
+        _reserved_keywords["double"] = std::make_unique<Token>(DOUBLE);
+        _reserved_keywords["byte"]   = std::make_unique<Token>(BYTE);
+        _reserved_keywords["bool"]   = std::make_unique<Token>(BOOL);
+        _reserved_keywords["char"]   = std::make_unique<Token>(CHAR);
+        _reserved_keywords["string"] = std::make_unique<Token>(STRING_TYPE);
+        _reserved_keywords["i8"]     = std::make_unique<Token>(I8);
+        _reserved_keywords["i16"]    = std::make_unique<Token>(I16);
+        _reserved_keywords["i32"]    = std::make_unique<Token>(I32);
+        _reserved_keywords["u8"]     = std::make_unique<Token>(U8);
+        _reserved_keywords["u16"]    = std::make_unique<Token>(U16);
+        _reserved_keywords["u32"]    = std::make_unique<Token>(U32);
+        _reserved_keywords["void"]   = std::make_unique<Token>(VOID);
+
+        _reserved_keywords["struct"] = std::make_unique<Token>(STRUCT);
+        _reserved_keywords["class"]  = std::make_unique<Token>(CLASS);
+        _reserved_keywords["super"]  = std::make_unique<Token>(SUPER);
+        _reserved_keywords["this"]   = std::make_unique<Token>(THIS);
+        _reserved_keywords["new"]    = std::make_unique<Token>(NEW);
     }
 }

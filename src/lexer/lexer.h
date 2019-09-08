@@ -2,7 +2,9 @@
 #define CERBERUS_LEXER_H_
 
 #include <vector>
+#include <map>
 #include <string>
+#include <memory>
 
 #include "../token/token.h"
 
@@ -41,6 +43,11 @@ namespace cerberus {
 
     private:
         /**
+         * Carrega o dicionário com os Tokens de cada palavra reservada
+         */
+        void load_reserved_keywords();
+
+        /**
          * Retorna e consome o caracter sendo lido atualmente
          */
         char move();
@@ -70,10 +77,12 @@ namespace cerberus {
         std::string read_until_find(char expected);
 
         /**
-         * Consome os caracteres da entrada enquanto os seus valores forem numéricos (inteiros ou decimais), e retorna a 
-         * concatenação destes
+         * Consome os caracteres da entrada enquanto os seus valores forem numéricos (inteiros ou decimais)
+         * 
+         * Retorna o Token que representa o número, com o seu valor, e se é um decimal ou inteiro
          */
-        std::string read_number();
+        Token read_number();
+        Token read_number(char preceded_digit);
 
         /**
          * Consome os caracteres da entrada enquanto os seus valores forem alfanuméricos,
@@ -81,7 +90,7 @@ namespace cerberus {
          * Retorna o próprio Token que o define, indicando se este é um identificador ou uma palavra
          * reservada. No último caso, retorna o tipo exato do Token desta palavra reservada
          */
-        Token read_identifier();
+        Token read_identifier(char preceded_by);
 
         /**
          * Verifica se ainda há caracteres na entrada para serem lidos
@@ -128,8 +137,10 @@ namespace cerberus {
         bool is_alphanumeric(char chr);
 
         std::string _source;
+
         std::vector<Token> _tokens;
         std::vector<std::string> _errors;
+        std::map<std::string, std::unique_ptr<Token>> _reserved_keywords;
         
         size_t _source_size;
         unsigned int _current;

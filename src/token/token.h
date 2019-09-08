@@ -14,6 +14,7 @@ namespace cerberus {
          * Recebe como parâmetros o tipo do Token, e o valor deste (seu lexema)
          */
         Token(TokenType type, std::string lexeme);
+        Token(TokenType type);
 
         /**
          * Destrutor da classe. Não realiza nenhuma operação
