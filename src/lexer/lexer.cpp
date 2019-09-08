@@ -151,6 +151,8 @@ namespace cerberus {
         _current += 1;
         _col     += 1;
 
+        //printf("Moving. Current: %d\n", _current);
+
         return _source.at(_current - 1);
     }
 
@@ -179,7 +181,7 @@ namespace cerberus {
     std::string Lexer::read_until_find(char expected) {
         std::stringstream result_sstream;
 
-        for (char peeked_char = peek(); peeked_char != expected; move()) {
+        for (char peeked_char = move(); peeked_char != expected; peeked_char = move()) {
             if (ended()) {
                 add_error("Unterminated string started", true);
                 break;
@@ -195,7 +197,7 @@ namespace cerberus {
         std::stringstream number_sstream;
         bool readed_decimal_separator = false;
 
-        for (char peeked = peek(); is_numeric(peeked) || peeked == '.'; move()) {
+        for (char peeked = move(); is_numeric(peeked) || peeked == '.'; peeked = move()) {
             if (peeked == '.' && readed_decimal_separator) {
                 add_error("Invalid decimal literal", true, true);
                 break;
@@ -223,12 +225,14 @@ namespace cerberus {
     Token Lexer::read_identifier(char preceded_by) {
         std::stringstream identifier_sstream;
         std::string identifier;
-        std::unique_ptr<Token> reserved_token_ptr;
 
         identifier_sstream << preceded_by;
 
-        for (char peeked = peek(); is_alphanumeric(peeked); move()) 
+        for (char peeked = move(); is_alphanumeric(peeked); peeked = move()) { 
             identifier_sstream << peeked;
+
+            //fprintf(stdout, "%c\n", peeked);
+        }
 
         identifier = identifier_sstream.str();
 
