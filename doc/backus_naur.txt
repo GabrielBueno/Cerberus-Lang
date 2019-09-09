@@ -1,0 +1,50 @@
+letra  ::= [a-zA-Z]
+digito ::= [0-9]
+
+alfanumerico ::= letra | digito
+
+inteiro ::= digito+
+decimal ::= inteiro ("." inteiro+)*
+numero  ::= inteiro | decimal
+
+string   ::= '"' alfanumerico* '"'
+caracter ::= "'" alfanumerico* "'"
+booleano ::= "true" | "false"
+nulo     ::= "null"
+dado     ::= numero | string | caracter | booleano
+
+tipo_de_dado ::= "int"  | "uint" | "double" | "byte" | 
+                 "bool" | "char" | "string" | "i8"   | 
+                 "i16"  | "i32"  | "u8"     | "u16"  | 
+                 "u32"  | "void"
+
+palavra_reservada ::= tipo_de_dado | booleano | nulo |
+                      "let" | "const" | "func" | "if" | "else" | 
+                      "elif" | "while" | "for" | "struct"
+
+identificador ::= (("_" | letra) ("_" | alfanumerico)*) - palavra_reservada
+
+operador_unario  ::= “~” | “!” | “-”
+operador_binario ::= “+” | “-” | “*” | “/” | ">" | ">=" | "<" | "<=" | "==" | "!="
+
+expressao_unaria   ::= operador_unario (numero | expressao_agrupada)
+expressao_binaria  ::= expressao operador_binario expressao
+expressao_agrupada ::= “(“ expressao “)”
+
+expressao ::= numero | expressao_unaria | expressao_binaria | expressao_agrupada
+
+bloco ::= "{" (declaracao_variavel | declaracao_constante | atribuicao | chamada_funcao | desvio_condicional)* "}"
+
+chamada_funcao ::= identificador "(" identificador* ")"
+atribuicao     ::= identificador " = " (dado | expressao | identificador | chamada_funcao)
+
+desvio_condicional ::= (("if " | "while ") "(" expressao ")" | "for " "(" declaracao_variavel? ";" expressao? ";" (chamada_funcao | atribuicao)? ")") bloco
+
+declaracao_variavel ::= ("let " identificador ": " tipo_de_dado "=" dado ";") |
+                        ("let " identificador ": " tipo_de_dado ";") | 
+                        ("let " identificador "=" dado) ";"
+
+declaracao_constante ::= ("const " identificador ": " tipo_de_dado "=" dado ";") |
+                         ("const " identificador "=" dado) ";"
+
+declaracao_funcao ::= "func " identificador "(" (identificador ": " tipo_de_dado ",")* ")" bloco
