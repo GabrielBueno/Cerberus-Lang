@@ -71,10 +71,10 @@ namespace cerberus {
         bool move_if_match(char expected);
 
         /**
-         * Consome todos os caracteres da entrada, concatenando-os numa string, até encontrar um caracter
-         * específico, sendo que este não será concatenado nem consumido.
+         * Consome todos os caracteres da entrada, concatenando-os numa string, até encontrar o 
+         * caracter ".
          */
-        std::string read_until_find(char expected);
+        std::string read_string();
 
         /**
          * Consome os caracteres da entrada enquanto os seus valores forem numéricos (inteiros ou decimais)

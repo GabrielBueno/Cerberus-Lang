@@ -106,7 +106,7 @@ namespace cerberus {
                 case '~': add_token(BITWISE_NOT); break;
 
                 case '"':
-                    add_token(STRING_LITERAL, read_until_find('"'));
+                    add_token(STRING_LITERAL, read_string());
 
                     // Consome o último "
                     move();
@@ -178,10 +178,10 @@ namespace cerberus {
         return matched;
     }
 
-    std::string Lexer::read_until_find(char expected) {
+    std::string Lexer::read_string() {
         std::stringstream result_sstream;
 
-        for (char peeked_char = move(); peeked_char != expected; peeked_char = move()) {
+        for (char peeked_char = move(); peeked_char != '"'; peeked_char = move()) {
             if (ended()) {
                 add_error("Unterminated string started", true);
                 break;
@@ -197,7 +197,7 @@ namespace cerberus {
         std::stringstream number_sstream;
         bool readed_decimal_separator = false;
 
-        for (char peeked = move(); is_numeric(peeked) || peeked == '.'; peeked = move()) {
+        for (char peeked = peek(); is_numeric(peeked) || peeked == '.'; peeked = move()) {
             if (peeked == '.' && readed_decimal_separator) {
                 add_error("Invalid decimal literal", true, true);
                 break;
