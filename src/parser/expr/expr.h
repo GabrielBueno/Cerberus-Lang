@@ -4,7 +4,9 @@
 #include "../../token/token.h"
 
 namespace cerberus {
-    class Expr {};
+    class Expr {
+        
+    };
 
     class BinaryExpr : Expr {
     public:

@@ -2,16 +2,13 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "g++.exe build active file",
-            "command": "D:\\Gabriel\\Programacao\\Linguagens\\C_Cpp\\MinGW\\bin\\g++.exe",
+            "label": "build.py",
+            "command": "python ${workspaceFolder}\\util\\build.py",
             "args": [
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${workspaceFolder}"
             ],
             "options": {
-                "cwd": "D:\\Gabriel\\Programacao\\Linguagens\\C_Cpp\\MinGW\\bin"
+                
             }
         }
     ],
