@@ -9,16 +9,16 @@ namespace Cerberus {
 
     /* Métodos públicos */
 
-    Expr Parser::parse() {
+    std::unique_ptr<Expr> Parser::parse() {
         return expression();
     }
 
-    Expr Parser::expression() {
+    std::unique_ptr<Expr> Parser::expression() {
         return equality();
     }
 
-    Expr Parser::equality() {
-        Expr expr = comparison();
+    std::unique_ptr<Expr> Parser::equality() {
+        std::unique_ptr<Expr> expr = comparison();
 
         if (match(EQUAL_EQUAL) || match(NOT_EQUAL)) {
             
@@ -27,23 +27,23 @@ namespace Cerberus {
         return expr;
     }
     
-    Expr Parser::comparison() {
+    std::unique_ptr<Expr> Parser::comparison() {
 
     }
     
-    Expr Parser::addition() {
+    std::unique_ptr<Expr> Parser::addition() {
 
     }
     
-    Expr Parser::multiplication() {
+    std::unique_ptr<Expr> Parser::multiplication() {
 
     }
     
-    Expr Parser::unary() {
+    std::unique_ptr<Expr> Parser::unary() {
 
     }
     
-    Expr Parser::literal() {
+    std::unique_ptr<Expr> Parser::literal() {
 
     }
 

@@ -17,7 +17,7 @@ namespace Cerberus {
 
     class BinaryExpr : public Expr {
     public:
-        BinaryExpr(std::unique_ptr<Expr> left,std::unique_ptr<Token> expr_operator, std::unique_ptr<Expr> right);
+        BinaryExpr(std::unique_ptr<Expr> left, std::unique_ptr<Token> expr_operator, std::unique_ptr<Expr> right);
 
         const Expr& get_left_expr();
         const Expr& get_right_expr();
