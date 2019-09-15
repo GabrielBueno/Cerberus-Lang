@@ -1,9 +1,9 @@
 #include "expr.h"
 
 namespace Cerberus {
-    UnaryExpr::UnaryExpr(Token* exprOperator, Expr* expr) : 
-    _operator(exprOperator),
-    _expr(expr)
+    UnaryExpr::UnaryExpr(std::unique_ptr<Token> expr_operator, std::unique_ptr<Expr> expr) : 
+        _operator(std::move(expr_operator)),
+        _expr(std::move(expr))
     {
     }
 
@@ -15,11 +15,11 @@ namespace Cerberus {
         return expr_stream.str();
     }
 
-    Expr* UnaryExpr::get_expr() {
-        return _expr;
+    const Expr& UnaryExpr::get_expr() {
+        return *_expr.get();
     }
 
-    Token* UnaryExpr::get_operator() {
-        return _operator;
+    const Token& UnaryExpr::get_operator() {
+        return *_operator.get();
     }
 }

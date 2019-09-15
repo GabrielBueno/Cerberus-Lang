@@ -1,10 +1,10 @@
 #include "expr.h"
 
 namespace Cerberus {
-    BinaryExpr::BinaryExpr(Expr* left, Token* expr_operator, Expr* right) : 
-    _left_expr(left),
-    _operator(expr_operator),
-    _right_expr(right) 
+    BinaryExpr::BinaryExpr(std::unique_ptr<Expr> left, std::unique_ptr<Token> expr_operator, std::unique_ptr<Expr> right) : 
+        _left_expr(std::move(left)),
+        _operator(std::move(expr_operator)),
+        _right_expr(std::move(right)) 
     {
     }
 
@@ -16,15 +16,15 @@ namespace Cerberus {
         return expr_stream.str();
     }
 
-    Expr* BinaryExpr::get_left_expr() {
-        return _left_expr;
+    const Expr& BinaryExpr::get_left_expr() {
+        return *_left_expr.get();
     }
 
-    Expr* BinaryExpr::get_right_expr() {
-        return _right_expr;
+    const Expr& BinaryExpr::get_right_expr() {
+        return *_right_expr.get();
     }
 
-    Token* BinaryExpr::get_operator() {
-        return _operator;
+    const Token& BinaryExpr::get_operator() {
+        return *_operator.get();
     }
 }

@@ -2,15 +2,25 @@
 #define CERBERUS_PARSER_H_
 
 #include <vector>
+
 #include "../token/token.h"
+#include "./expr/expr.h"
 
 namespace Cerberus {
     class Parser {
     public:
         Parser(const std::vector<Token>& tokens);
 
+        Expr parse();
+
     private:
-        
+        Expr expression();
+        Expr equality();
+        Expr comparison();
+        Expr addition();
+        Expr multiplication();
+        Expr unary();
+        Expr literal();
 
         /**
          * Retorna o Token atual, e avança uma posição na lista de Tokens

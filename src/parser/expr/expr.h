@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <memory>
 
 #include "../../token/token.h"
 // #include "../util/expr_visitor.h"
@@ -16,56 +17,56 @@ namespace Cerberus {
 
     class BinaryExpr : public Expr {
     public:
-        BinaryExpr(Expr* left, Token* expr_operator, Expr* right);
+        BinaryExpr(std::unique_ptr<Expr> left,std::unique_ptr<Token> expr_operator, std::unique_ptr<Expr> right);
 
-        Expr* get_left_expr();
-        Expr* get_right_expr();
-        Token* get_operator();
+        const Expr& get_left_expr();
+        const Expr& get_right_expr();
+        const Token& get_operator();
 
         std::string print();
 
     private:
-        Expr* _left_expr;
-        Token* _operator;
-        Expr* _right_expr;
+        std::unique_ptr<Expr> _left_expr;
+        std::unique_ptr<Token> _operator;
+        std::unique_ptr<Expr> _right_expr;
     };
 
     class UnaryExpr : public Expr {
     public:
-        UnaryExpr(Token* expr_operator, Expr* expr);
+        UnaryExpr(std::unique_ptr<Token> expr_operator, std::unique_ptr<Expr> expr);
 
-        Expr* get_expr();
-        Token* get_operator();
+        const Expr& get_expr();
+        const Token& get_operator();
 
         std::string print();
 
     private:
-        Token* _operator;
-        Expr* _expr;
+        std::unique_ptr<Token> _operator;
+        std::unique_ptr<Expr> _expr;
     };
 
     class GroupingExpr : public Expr {
     public:
-        GroupingExpr(Expr* expr);
+        GroupingExpr(std::unique_ptr<Expr> expr);
 
-        Expr* get_expr();
+        const Expr& get_expr();
 
         std::string print();
 
     private:
-        Expr* _expr;
+        std::unique_ptr<Expr> _expr;
     };
 
     class LiteralExpr : public Expr {
     public:
-        LiteralExpr(Token* literal);
+        LiteralExpr(std::unique_ptr<Token> literal);
 
-        Token* get_literal();
+        const Token& get_literal();
 
         std::string print();
 
     private:
-        Token* _literal;
+        std::unique_ptr<Token> _literal;
     };
 }
 

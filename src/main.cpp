@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "lexer/lexer.h"
 #include "parser/expr/expr.h"
@@ -15,10 +16,14 @@ int main(int argc, char **argv) {
     Cerberus::Token t2 = Cerberus::Token(Cerberus::INTEGER_LITERAL, "6");
     Cerberus::Token t3 = Cerberus::Token(Cerberus::PLUS);
 
-    Cerberus::LiteralExpr l1 = Cerberus::LiteralExpr(&t1);
-    Cerberus::LiteralExpr l2 = Cerberus::LiteralExpr(&t2);
+    Cerberus::LiteralExpr l1 = Cerberus::LiteralExpr(std::make_unique<Cerberus::Token>(Cerberus::INTEGER_LITERAL, "5"));
+    Cerberus::LiteralExpr l2 = Cerberus::LiteralExpr(std::make_unique<Cerberus::Token>(Cerberus::INTEGER_LITERAL, "6"));
 
-    Cerberus::BinaryExpr b1 = Cerberus::BinaryExpr(&l1, &t3, &l2);
+    Cerberus::BinaryExpr b1 = Cerberus::BinaryExpr(
+        std::make_unique<Cerberus::LiteralExpr>(std::make_unique<Cerberus::Token>(Cerberus::INTEGER_LITERAL, "5")),
+        std::make_unique<Cerberus::Token>(Cerberus::PLUS),
+        std::make_unique<Cerberus::LiteralExpr>(std::make_unique<Cerberus::Token>(Cerberus::INTEGER_LITERAL, "6"))
+    );
     
     std::cout << b1.print();
 

@@ -7,6 +7,46 @@ namespace Cerberus {
         _eof_token(Token(END_OF_FILE))
     {}
 
+    /* Métodos públicos */
+
+    Expr Parser::parse() {
+        return expression();
+    }
+
+    Expr Parser::expression() {
+        return equality();
+    }
+
+    Expr Parser::equality() {
+        Expr expr = comparison();
+
+        if (match(EQUAL_EQUAL) || match(NOT_EQUAL)) {
+            
+        }
+
+        return expr;
+    }
+    
+    Expr Parser::comparison() {
+
+    }
+    
+    Expr Parser::addition() {
+
+    }
+    
+    Expr Parser::multiplication() {
+
+    }
+    
+    Expr Parser::unary() {
+
+    }
+    
+    Expr Parser::literal() {
+
+    }
+
     /* Métodos privados */
 
     const Token& Parser::consume() {
