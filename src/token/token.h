@@ -46,12 +46,12 @@ namespace Cerberus {
         /**
          * Obtém o tipo deste Token
          */
-        TokenType type();
+        TokenType type() const;
 
         /**
          * Obtém o lexema (símbolo, valor) deste Token
          */
-        std::string lexeme();
+        std::string lexeme() const;
 
     private:
         TokenType _type;

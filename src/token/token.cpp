@@ -24,11 +24,11 @@ namespace Cerberus {
         return _col;
     }
 
-    TokenType Token::type() {
+    TokenType Token::type() const {
         return _type;
     }
 
-    std::string Token::lexeme() {
+    std::string Token::lexeme() const {
         return _lexeme;
     }
 }
