@@ -1,46 +1,71 @@
 #ifndef CERBERUS_EXPR_H_
 #define CERBERUS_EXPR_H_
 
+#include <string>
+#include <sstream>
+
 #include "../../token/token.h"
+// #include "../util/expr_visitor.h"
 
-namespace cerberus {
+namespace Cerberus {
     class Expr {
-        
+    public:
+        virtual std::string print();
+        Expr();
     };
 
-    class BinaryExpr : Expr {
+    class BinaryExpr : public Expr {
     public:
-        BinaryExpr(Expr left, Token exprOperator, Expr right);
+        BinaryExpr(Expr* left, Token* expr_operator, Expr* right);
+
+        Expr* get_left_expr();
+        Expr* get_right_expr();
+        Token* get_operator();
+
+        std::string print();
 
     private:
-        Expr _leftExpr;
-        Token _operator;
-        Expr _rightExpr;
+        Expr* _left_expr;
+        Token* _operator;
+        Expr* _right_expr;
     };
 
-    class UnaryExpr : Expr {
+    class UnaryExpr : public Expr {
     public:
-        UnaryExpr(Token exprOperator, Expr expr);
+        UnaryExpr(Token* expr_operator, Expr* expr);
+
+        Expr* get_expr();
+        Token* get_operator();
+
+        std::string print();
 
     private:
-        Token _operator;
-        Expr _expr;
+        Token* _operator;
+        Expr* _expr;
     };
 
-    class GroupingExpr : Expr {
+    class GroupingExpr : public Expr {
     public:
-        GroupingExpr(Expr expr);
+        GroupingExpr(Expr* expr);
+
+        Expr* get_expr();
+
+        std::string print();
 
     private:
-        Expr _expr;
+        Expr* _expr;
     };
 
-    class LiteralExpr : Expr {
+    class LiteralExpr : public Expr {
     public:
-        LiteralExpr(Token literal);
+        LiteralExpr(Token* literal);
+
+        Token* get_literal();
+
+        std::string print();
 
     private:
-        Token _literal;
+        Token* _literal;
     };
 }
 

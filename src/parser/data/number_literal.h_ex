@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace cerberus {
+namespace Cerberus {
     class NumberLiteral {
     protected:
         NumberLiteral();

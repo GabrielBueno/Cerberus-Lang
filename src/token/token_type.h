@@ -1,4 +1,4 @@
-namespace cerberus {
+namespace Cerberus {
     /**
      * Define todos os possíveis tipos de Tokens 
      */

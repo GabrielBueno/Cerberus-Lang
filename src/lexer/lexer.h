@@ -8,7 +8,7 @@
 
 #include "../token/token.h"
 
-namespace cerberus {
+namespace Cerberus {
     class Lexer {
     public:
         Lexer(std::string source);

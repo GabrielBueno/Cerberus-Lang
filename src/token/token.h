@@ -5,7 +5,7 @@
 
 #include "token_type.h"
 
-namespace cerberus {
+namespace Cerberus {
     class Token {
     public:
         /**

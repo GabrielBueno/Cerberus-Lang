@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <sstream>
 
-namespace cerberus {
+namespace Cerberus {
     Lexer::Lexer(std::string source) : 
         _source(source), 
         _source_size(source.size()),
