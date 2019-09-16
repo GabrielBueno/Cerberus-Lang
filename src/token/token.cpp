@@ -5,6 +5,7 @@
 namespace Cerberus {
     Token::Token(TokenType type) : _type(type) {}
     Token::Token(TokenType type, std::string lexeme) : _type(type), _lexeme(lexeme) {}
+    Token::Token(const Token& token) : _type(token.type()), _lexeme(token.lexeme()) {}
 
     Token::~Token() {}
 

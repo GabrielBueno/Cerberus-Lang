@@ -15,6 +15,7 @@ namespace Cerberus {
          */
         Token(TokenType type, std::string lexeme);
         Token(TokenType type);
+        Token(const Token& token); // Contrutor de cópia
 
         /**
          * Destrutor da classe. Não realiza nenhuma operação
