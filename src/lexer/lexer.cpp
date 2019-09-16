@@ -39,54 +39,54 @@ namespace Cerberus {
                 case '\n': newline(); break;
 
                 /* Pontuações */
-                case '(': add_token(LEFT_PAREN);  break;
-                case ')': add_token(RIGHT_PAREN); break;
-                case '[': add_token(LEFT_SQUARE_BRACKET);  break;
-                case ']': add_token(RIGHT_SQUARE_BRACKET); break;
-                case '{': add_token(LEFT_CURLY_BRACE);     break;
-                case '}': add_token(RIGHT_CURLY_BRACE);    break;
-                case '.': add_token(DOT);       break;
-                case ',': add_token(COMMA);     break;
-                case ';': add_token(SEMICOLON); break;
-                case '#': add_token(HASHTAG);   break;
+                case '(': add_token(LEFT_PAREN, "(");  break;
+                case ')': add_token(RIGHT_PAREN, ")"); break;
+                case '[': add_token(LEFT_SQUARE_BRACKET, "[");  break;
+                case ']': add_token(RIGHT_SQUARE_BRACKET, "]"); break;
+                case '{': add_token(LEFT_CURLY_BRACE, "{");     break;
+                case '}': add_token(RIGHT_CURLY_BRACE, "}");    break;
+                case '.': add_token(DOT, ".");       break;
+                case ',': add_token(COMMA, ",");     break;
+                case ';': add_token(SEMICOLON, ";"); break;
+                case '#': add_token(HASHTAG, "#");   break;
 
                 /* Operadores aritméticos */
-                case '+': add_token(PLUS);      break;
-                case '-': add_token(MINUS);     break;
-                case '*': add_token(STAR);      break;
-                case '/': add_token(SLASH);     break;
+                case '+': add_token(PLUS, "+");      break;
+                case '-': add_token(MINUS, "-");     break;
+                case '*': add_token(STAR, "*");      break;
+                case '/': add_token(SLASH, "/");     break;
 
                 /* Operadores lógicos/bit a bit */
                 case '!':
-                    move_if_match('=') ? add_token(NOT_EQUAL) : add_token(NOT);
+                    move_if_match('=') ? add_token(NOT_EQUAL, "!=") : add_token(NOT, "!");
                     break;
 
                 case '=':
-                    move_if_match('=') ? add_token(EQUAL_EQUAL) : add_token(EQUAL);
+                    move_if_match('=') ? add_token(EQUAL_EQUAL, "==") : add_token(EQUAL, "=");
                     break;
 
                 case '>':
                     if (match('=')) {
-                        add_token(GREATER_EQUAL);
+                        add_token(GREATER_EQUAL, ">=");
                         move();
                     } else if (match('>')) {
-                        add_token(RIGHT_SHIFT);
+                        add_token(RIGHT_SHIFT, ">>");
                         move();
                     } else {
-                        add_token(GREATER);
+                        add_token(GREATER, ">");
                     }
 
                     break;
 
                 case '<':
                     if (match('=')) {
-                        add_token(LESSER_EQUAL);
+                        add_token(LESSER_EQUAL, "<=");
                         move();
                     } else if (match('<')) {
-                        add_token(LEFT_SHIFT);
+                        add_token(LEFT_SHIFT, "<<");
                         move();
                     } else {
-                        add_token(LESSER);
+                        add_token(LESSER, "<");
                     }
 
                     break;
