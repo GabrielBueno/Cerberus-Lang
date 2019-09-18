@@ -13,13 +13,13 @@ namespace Cerberus {
     /* Métodos públicos */
 
     std::unique_ptr<Expr> Parser::parse() {
-        return std::move(expression());
+        return expression();
     }
 
     /* Métodos privados */
 
     std::unique_ptr<Expr> Parser::expression() {
-        return std::move(equality());
+        return equality();
     }
 
     std::unique_ptr<Expr> Parser::equality() {
@@ -31,7 +31,7 @@ namespace Cerberus {
             expr = std::make_unique<BinaryExpr>(std::move(expr), std::make_unique<Token>(equality_operator), comparison());
         }
 
-        return std::move(expr);
+        return expr;
     }
     
     std::unique_ptr<Expr> Parser::comparison() {
@@ -43,7 +43,7 @@ namespace Cerberus {
             expr = std::make_unique<BinaryExpr>(std::move(expr), std::make_unique<Token>(comparison_operator), addition());
         }
 
-        return std::move(expr);
+        return expr;
     }
     
     std::unique_ptr<Expr> Parser::addition() {
@@ -55,7 +55,7 @@ namespace Cerberus {
             expr = std::make_unique<BinaryExpr>(std::move(expr), std::make_unique<Token>(addition_operator), multiplication());
         }
 
-        return std::move(expr);
+        return expr;
     }
     
     std::unique_ptr<Expr> Parser::multiplication() {
@@ -67,7 +67,7 @@ namespace Cerberus {
             expr = std::make_unique<BinaryExpr>(std::move(expr), std::make_unique<Token>(multiplication_operator), unary());
         }
 
-        return std::move(expr);
+        return expr;
     }
     
     std::unique_ptr<Expr> Parser::unary() {
@@ -77,7 +77,7 @@ namespace Cerberus {
             return std::make_unique<UnaryExpr>(std::make_unique<Token>(unary_operator), unary());
         }
 
-        return std::move(literal());
+        return literal();
     }
     
     std::unique_ptr<Expr> Parser::literal() {
@@ -90,18 +90,18 @@ namespace Cerberus {
             if (!match(RIGHT_PAREN)) {
                 // TODO: Tratamento de erros
                 std::cout << "Closing ) expected on expression." << std::endl;
-                exit(1);
+                // exit(1);
             }
 
             // Se livra do ')'
             consume();
 
-            return std::move(grouped_expr);
+            return grouped_expr;
         }
 
         std::unique_ptr<Expr> literal_expr = std::make_unique<LiteralExpr>(std::make_unique<Token>(consume()));
 
-        return std::move(literal_expr);
+        return literal_expr;
     }
 
     const Token& Parser::consume() {
