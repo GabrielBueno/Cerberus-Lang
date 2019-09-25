@@ -1,3 +1,6 @@
+#ifndef CERBERUS_TOKEN_TYPE_H_
+#define CERBERUS_TOKEN_TYPE_H_
+
 namespace Cerberus {
     /**
      * Define todos os possíveis tipos de Tokens 
@@ -54,3 +57,5 @@ namespace Cerberus {
         END_OF_FILE, NO_TYPE
     };
 }
+
+#endif
