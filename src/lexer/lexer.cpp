@@ -10,7 +10,7 @@ namespace Cerberus {
     Lexer::Lexer(std::string input) : 
         _current_char(0), 
         _input(input),
-        _tokens(std::move(std::make_unique<std::vector<Token>>()))
+        _tokens(std::make_unique<std::vector<Token>>())
     {
     }
 
@@ -27,6 +27,12 @@ namespace Cerberus {
 
         while(!input_ended()) {
             switch (current()) {
+                case ' ':
+                case '\n':
+                case '\r':
+                case '\t':
+                    break;
+
                 case '+': add_token(PLUS,  "+"); break;
                 case '-': add_token(MINUS, "-"); break;
                 case '*': add_token(STAR,  "*"); break;
