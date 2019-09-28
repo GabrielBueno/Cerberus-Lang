@@ -1,7 +1,0 @@
-digito -> [0-9]
-
-expressao -> soma
-soma -> termo {("+"|"-")  termo}*
-termo -> fator {("*"|"/") fator}*
-fator -> unario | "(" expressao ")"
-unario -> digito | "-" digito

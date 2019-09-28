@@ -1,0 +1,14 @@
+letra  ::= [a-zA-Z]
+digito ::= [0-9]
+
+alfanumerico ::= letra | digito
+
+inteiro ::= digito+
+decimal ::= inteiro ("." inteiro+)*
+numero  ::= inteiro | decimal
+
+expressao ::= soma
+soma      ::= termo ([+-] termo)*
+termo     ::= fator ([*/] fator)*
+fator     ::= unario | "(" expressao ")"
+unario    ::= ("-") digito
