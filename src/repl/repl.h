@@ -14,8 +14,10 @@ namespace Cerberus {
     private:
         void read_cmd();
         void exec_cmd();
+        void quit();
 
         std::string _cmd_to_exec;
+        bool _is_running;
     };
 }
 

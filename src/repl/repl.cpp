@@ -6,16 +6,19 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 #include "../parser/expr/expr.h"
+#include "../utils/debugger.h"
 
 namespace Cerberus {
-    Repl::Repl() : _cmd_to_exec("") 
+    Repl::Repl() : _cmd_to_exec("") , _is_running(false)
     {
     }
 
     Repl::~Repl() {}
 
     void Repl::begin() {
-        while (true) {
+        _is_running = true;
+
+        while (_is_running) {
             read_cmd();
             exec_cmd();
         }
@@ -24,18 +27,26 @@ namespace Cerberus {
     void Repl::read_cmd() {
         std::cout << ">> ";
         std::getline(std::cin, _cmd_to_exec);
-
-        std::cout << "Parsing expression: " << _cmd_to_exec << std::endl;
     }
 
     void Repl::exec_cmd() {
+        if (_cmd_to_exec == "quit") {
+            quit();
+            return;
+        }
+
+        std::cout << "Parsing expression: " << _cmd_to_exec << std::endl;
+
         Lexer lexer(_cmd_to_exec);
-        Parser parser(lexer.tokenize());
+        std::unique_ptr<std::vector<Token>> tokens = lexer.tokens();
 
-        // DEBUG
+        // Debug
+        Debugger::print(*tokens);
+    }
 
-        std::unique_ptr<Expr> expr = parser.parse();
+    void Repl::quit() {
+        std::cout << "\nBye.";
 
-        std::cout << expr->print();
+        _is_running = false;
     }
 }
