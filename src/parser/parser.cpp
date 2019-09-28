@@ -79,15 +79,29 @@ namespace Cerberus {
         return _tokens[_current++];
     }
 
-    const Token& Parser::peek() {
+    const Token& Parser::current() {
         if (ended())
             return _eof_token;
 
         return _tokens[_current];
     }
 
+    const Token& Parser::next() {
+        if (ended() || _tokens.size() <= _current + 1)
+            return _eof_token;
+
+        return _tokens[_current + 1];
+    }
+
+    const Token& Parser::previous() {
+        if (_current == 0)
+            return _eof_token;
+
+        return _tokens[_current - 1];
+    }
+
     bool Parser::match(TokenType type) {
-        return peek().type() == type;
+        return current().type() == type;
     }
 
     bool Parser::ended() {

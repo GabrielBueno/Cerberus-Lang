@@ -30,7 +30,17 @@ namespace Cerberus {
         /**
          * Retorna o Token atual, sem alterar a posição de leitura da lista de Tokens
          */
-        const Token& peek();
+        const Token& current();
+
+        /**
+         * Retorna o Token anterior na lista
+         */
+        const Token& previous();
+
+        /**
+         * Retorna o próximo Token na lista
+         */
+        const Token& next();
 
         /**
          * Verifica se o Token apontado é de um tipo específico
