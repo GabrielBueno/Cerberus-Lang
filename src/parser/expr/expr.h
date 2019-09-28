@@ -11,7 +11,7 @@
 namespace Cerberus {
     class Expr {
     public:
-        virtual std::string print();
+        virtual std::string print() const;
         Expr();
     };
 
@@ -23,7 +23,7 @@ namespace Cerberus {
         const Expr& get_right_expr();
         const Token& get_operator();
 
-        std::string print();
+        std::string print() const;
 
     private:
         std::unique_ptr<Expr> _left_expr;
@@ -38,7 +38,7 @@ namespace Cerberus {
         const Expr& get_expr();
         const Token& get_operator();
 
-        std::string print();
+        std::string print() const;
 
     private:
         std::unique_ptr<Token> _operator;
@@ -51,7 +51,7 @@ namespace Cerberus {
 
         const Expr& get_expr();
 
-        std::string print();
+        std::string print() const;
 
     private:
         std::unique_ptr<Expr> _expr;
@@ -63,7 +63,7 @@ namespace Cerberus {
 
         const Token& get_literal();
 
-        std::string print();
+        std::string print() const;
 
     private:
         std::unique_ptr<Token> _literal;

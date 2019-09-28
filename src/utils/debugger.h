@@ -6,11 +6,13 @@
 
 #include "../lexer/lexer.h"
 #include "../token/token.h"
+#include "../parser/expr/expr.h"
 
 namespace Cerberus {
     class Debugger {
     public:
         static void print(const std::vector<Token>&);
+        static void print(const Expr&);
 
     private:
         Debugger();

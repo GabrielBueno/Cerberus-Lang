@@ -5,7 +5,7 @@ namespace Cerberus {
          _expr(std::move(expr)) {
     }
 
-    std::string GroupingExpr::print() {
+    std::string GroupingExpr::print() const {
         std::stringstream expr_stream;
 
         expr_stream << "(" << _expr->print() << ")";

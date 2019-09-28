@@ -8,7 +8,7 @@ namespace Cerberus {
     {
     }
 
-    std::string BinaryExpr::print() {
+    std::string BinaryExpr::print() const {
         std::stringstream expr_stream;
 
         expr_stream << "(" << _operator->lexeme() << " " << _left_expr->print() << " " << _right_expr->print() << ")";

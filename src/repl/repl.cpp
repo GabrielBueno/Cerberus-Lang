@@ -45,9 +45,7 @@ namespace Cerberus {
 
         // Debug
         Debugger::print(*tokens);
-        std::cout << std::endl;
-
-        std::cout << expr->print() << std::endl;
+        Debugger::print(*expr);
     }
 
     void Repl::quit() {

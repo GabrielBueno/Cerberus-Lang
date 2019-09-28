@@ -5,7 +5,7 @@ namespace Cerberus {
         _literal(std::move(literal)) {
     }
 
-    std::string LiteralExpr::print() {
+    std::string LiteralExpr::print() const {
         return _literal->lexeme();
     }
 

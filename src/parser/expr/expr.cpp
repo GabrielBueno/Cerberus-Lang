@@ -3,7 +3,7 @@
 namespace Cerberus {
     Expr::Expr() {}
 
-    std::string Expr::print() {
+    std::string Expr::print() const {
         return "";
     }
 }

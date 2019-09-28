@@ -10,4 +10,8 @@ namespace Cerberus {
             std::cout << "(" << token.type() << ", " << "\"" << token.lexeme() << "\"" << ")\n";
         }
     }
+
+    void Debugger::print(const Expr& expr) {
+        std::cout << expr.print() << std::endl;
+    }
 }
