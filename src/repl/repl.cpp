@@ -40,8 +40,14 @@ namespace Cerberus {
         Lexer lexer(_cmd_to_exec);
         std::unique_ptr<std::vector<Token>> tokens = lexer.tokens();
 
+        Parser parser(*tokens);
+        std::unique_ptr<Expr> expr = parser.parse();
+
         // Debug
         Debugger::print(*tokens);
+        std::cout << std::endl;
+
+        std::cout << expr->print() << std::endl;
     }
 
     void Repl::quit() {
