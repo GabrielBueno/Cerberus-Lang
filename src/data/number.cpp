@@ -2,9 +2,42 @@
 
 #include <string>
 
+#include "../token/token_type.h"
+
 namespace Cerberus {
     Number::Number(const Token& token) : _value(0.0) {
         parse(token);
+    }
+
+    double Number::get_value() {
+        return _value;
+    }
+
+    double Number::operate(const Token& operation) {
+        TokenType type = operation.type();
+
+        if (type == MINUS)
+            return -_value;
+
+        return _value;
+    }
+
+    double Number::operate(const Token& operation, double operand) {
+        TokenType type = operation.type();
+
+        if (type == PLUS)
+            return _value + operand;
+
+        if (type == MINUS)
+            return _value - operand;
+
+        if (type == STAR)
+            return _value * operand;
+
+        if (type == SLASH)
+            return _value / operand;
+
+        return _value;
     }
 
     void Number::parse(const Token& token) {

@@ -11,8 +11,10 @@
 namespace Cerberus {
     class Expr {
     public:
-        virtual std::string print() const;
         Expr();
+
+        virtual double eval();
+        virtual std::string print() const;
     };
 
     class BinaryExpr : public Expr {
@@ -23,6 +25,7 @@ namespace Cerberus {
         const Expr& get_right_expr();
         const Token& get_operator();
 
+        double eval();
         std::string print() const;
 
     private:
@@ -38,6 +41,7 @@ namespace Cerberus {
         const Expr& get_expr();
         const Token& get_operator();
 
+        double eval();
         std::string print() const;
 
     private:
@@ -51,6 +55,7 @@ namespace Cerberus {
 
         const Expr& get_expr();
 
+        double eval();
         std::string print() const;
 
     private:
@@ -63,6 +68,7 @@ namespace Cerberus {
 
         const Token& get_literal();
 
+        double eval();
         std::string print() const;
 
     private:

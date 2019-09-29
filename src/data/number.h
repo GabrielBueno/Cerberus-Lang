@@ -8,6 +8,9 @@ namespace Cerberus {
     public:
         Number(const Token&);
 
+        double get_value();
+        double operate(const Token& operation);
+        double operate(const Token& operation, double operand);
     private:
         void parse(const Token&);
 

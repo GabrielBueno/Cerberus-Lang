@@ -8,6 +8,26 @@ namespace Cerberus {
     {
     }
 
+    double BinaryExpr::eval() {
+        TokenType type              = _operator->type();
+        double left_expr_evaluated  = _left_expr->eval();
+        double right_expr_evaluated = _right_expr->eval();
+
+        if (type == PLUS)
+            return left_expr_evaluated + right_expr_evaluated;
+
+        if (type == MINUS)
+            return left_expr_evaluated - right_expr_evaluated;
+
+        if (type == STAR)
+            return left_expr_evaluated * right_expr_evaluated;
+
+        if (type == SLASH)
+            return left_expr_evaluated / right_expr_evaluated;
+
+        return left_expr_evaluated;
+    }
+
     std::string BinaryExpr::print() const {
         std::stringstream expr_stream;
 

@@ -44,8 +44,13 @@ namespace Cerberus {
         std::unique_ptr<Expr> expr = parser.parse();
 
         // Debug
+        std::cout << std::endl;
         Debugger::print(*tokens);
+        std::cout << std::endl;
         Debugger::print(*expr);
+        std::cout << std::endl;
+
+        std::cout << expr->eval() << std::endl;
     }
 
     void Repl::quit() {

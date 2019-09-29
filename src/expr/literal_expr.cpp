@@ -7,6 +7,10 @@ namespace Cerberus {
     {
     }
 
+    double LiteralExpr::eval() {
+        return _number.get_value();
+    }
+
     std::string LiteralExpr::print() const {
         return _literal->lexeme();
     }
