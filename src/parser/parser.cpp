@@ -62,8 +62,11 @@ namespace Cerberus {
     }
 
     std::unique_ptr<Expr> Parser::unary() {
-        if (match(MINUS))
-            return std::make_unique<UnaryExpr>(std::make_unique<Token>(consume()), literal());
+        if (match(MINUS)) {
+            const Token& token = consume();
+
+            return std::make_unique<UnaryExpr>(std::make_unique<Token>(token), literal());
+        }
 
         return literal();
     }

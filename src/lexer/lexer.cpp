@@ -117,7 +117,7 @@ namespace Cerberus {
         std::stringstream number;
         bool found_decimal = false;
 
-        while (is_numeric(current())) {
+        while (is_numeric(current()) || current_is('.')) {
             if (current_is('.') && !found_decimal) {
                 found_decimal = true;
             }
@@ -128,7 +128,7 @@ namespace Cerberus {
             
             number << current();
 
-            if (is_numeric(next()))
+            if (is_numeric(next()) || next_is('.'))
                 consume();
             else
                 break;

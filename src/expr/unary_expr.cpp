@@ -20,7 +20,7 @@ namespace Cerberus {
     std::string UnaryExpr::print() const {
         std::stringstream expr_stream;
 
-        expr_stream << "( " << _operator->lexeme() << " " << _expr->print() << ")";
+        expr_stream << "(" << _operator->lexeme() << " " << _expr->print() << ")";
 
         return expr_stream.str();
     }
