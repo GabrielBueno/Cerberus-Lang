@@ -1,5 +1,6 @@
 #include "number.h"
 
+#include <iostream>
 #include <string>
 
 #include "../token/token_type.h"
@@ -48,7 +49,7 @@ namespace Cerberus {
 
         for (unsigned int i = 0; i < lexeme.length(); i++) {
             char current_ch = lexeme[i];
-            int digit       = current_ch - '0';    
+            double digit    = current_ch - '0';    
 
             if (current_ch == '.') {
                 found_decimal = true;
