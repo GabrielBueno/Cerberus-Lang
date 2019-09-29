@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "../token/token.h"
-#include "./expr/expr.h"
+#include "../expr/expr.h"
 
 namespace Cerberus {
     class Parser {

@@ -6,7 +6,7 @@
 
 #include "../lexer/lexer.h"
 #include "../token/token.h"
-#include "../parser/expr/expr.h"
+#include "../expr/expr.h"
 
 namespace Cerberus {
     class Debugger {

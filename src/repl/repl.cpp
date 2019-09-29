@@ -5,7 +5,7 @@
 
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
-#include "../parser/expr/expr.h"
+#include "../expr/expr.h"
 #include "../utils/debugger.h"
 
 namespace Cerberus {

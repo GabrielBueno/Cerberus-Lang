@@ -2,7 +2,9 @@
 
 namespace Cerberus {
     LiteralExpr::LiteralExpr(std::unique_ptr<Token> literal) : 
-        _literal(std::move(literal)) {
+        _literal(std::move(literal)),
+        _number(Number(*_literal))
+    {
     }
 
     std::string LiteralExpr::print() const {

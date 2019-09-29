@@ -5,8 +5,8 @@
 #include <sstream>
 #include <memory>
 
-#include "../../token/token.h"
-// #include "../util/expr_visitor.h"
+#include "../token/token.h"
+#include "../data/number.h"
 
 namespace Cerberus {
     class Expr {
@@ -67,6 +67,7 @@ namespace Cerberus {
 
     private:
         std::unique_ptr<Token> _literal;
+        Number _number;
     };
 }
 
