@@ -12,11 +12,30 @@ namespace Cerberus {
 
     /* Métodos públicos */
 
-    std::unique_ptr<Expr> Parser::parse() {
-        return expression();
+    std::unique_ptr<Statement> Parser::parse() {
+        return expression_statement();
     }
 
     /* Métodos privados */
+
+    std::unique_ptr<Statement> variable_declaration() {
+        return nullptr;
+    }
+
+    std::unique_ptr<Statement> print_statement() {
+        return nullptr;
+    }
+
+    std::unique_ptr<Statement> expression_statement() {
+        return nullptr;
+    }
+
+
+    std::unique_ptr<Statement> Parser::expression_statement() {
+        std::unique_ptr<Expr> expr = expression();
+
+        return std::make_unique<ExpressionStatement>(std::move(expr));
+    }
 
     std::unique_ptr<Expr> Parser::expression() {
         return sum();
@@ -50,7 +69,7 @@ namespace Cerberus {
         if (match(LEFT_PAREN)) {
             consume();
 
-            std::unique_ptr<GroupingExpr> expr = std::make_unique<GroupingExpr>(expression());
+            std::unique_ptr<GroupingExpr> expr = std::make_unique<GroupingExpr>(sum());
 
             consume();
 

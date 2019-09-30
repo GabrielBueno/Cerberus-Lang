@@ -7,6 +7,16 @@ inteiro ::= digito+
 decimal ::= inteiro ("." inteiro+)*
 numero  ::= inteiro | decimal
 
+programa   ::= declaracao+
+declaracao ::= declaracao_variavel | statement
+
+statement ::= expressao | print
+
+declaracao_variavel ::= "let" identificador ("=" expressao) ";"
+print ::= "print" expressao ";"
+
+identificador ::= ("_" | letra) ("_" | alfanumerico)*
+
 expressao ::= soma
 soma      ::= termo ([+-] termo)*
 termo     ::= fator ([*/] fator)*

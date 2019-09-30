@@ -6,15 +6,20 @@
 
 #include "../token/token.h"
 #include "../expr/expr.h"
+#include "../stmt/statement.h"
 
 namespace Cerberus {
     class Parser {
     public:
         Parser(const std::vector<Token>& tokens);
 
-        std::unique_ptr<Expr> parse();
+        std::unique_ptr<Statement> parse();
 
     private:
+        std::unique_ptr<Statement> variable_declaration();
+        std::unique_ptr<Statement> print_statement();
+        std::unique_ptr<Statement> expression_statement();
+
         std::unique_ptr<Expr> expression();
         std::unique_ptr<Expr> sum();
         std::unique_ptr<Expr> term();
