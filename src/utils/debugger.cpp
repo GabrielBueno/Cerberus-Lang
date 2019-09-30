@@ -14,4 +14,8 @@ namespace Cerberus {
     void Debugger::print(const Expr& expr) {
         std::cout << expr.print() << std::endl;
     }
+
+    void Debugger::print(const Statement& stmt) {
+    	std::cout << stmt.describe() << std::endl;
+    }
 }

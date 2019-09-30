@@ -46,7 +46,15 @@ namespace Cerberus {
     }
 
     std::unique_ptr<Statement> Parser::print_statement() {
-        return nullptr;
+        if (match(PRINT)) {
+            consume();
+
+            std::unique_ptr<Expr> expr = expression();
+
+            return std::make_unique<PrintStatement>(std::move(expr));
+        }
+
+        return expression_statement();
     }
 
     std::unique_ptr<Statement> Parser::expression_statement() {

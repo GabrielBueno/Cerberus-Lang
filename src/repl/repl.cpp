@@ -6,6 +6,7 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
 #include "../expr/expr.h"
+#include "../stmt/statement.h"
 #include "../utils/debugger.h"
 
 namespace Cerberus {
@@ -40,15 +41,15 @@ namespace Cerberus {
         Lexer lexer(_cmd_to_exec);
         std::unique_ptr<std::vector<Token>> tokens = lexer.tokens();
 
-        // Parser parser(*tokens);
-        // std::unique_ptr<Expr> expr = parser.parse();
+        Parser parser(*tokens);
+        std::unique_ptr<Statement> stmt = parser.parse();
 
         // Debug
         std::cout << std::endl;
         Debugger::print(*tokens);
-        // std::cout << std::endl;
-        // Debugger::print(*expr);
-        // std::cout << std::endl;
+        std::cout << std::endl;
+        Debugger::print(*stmt);
+        std::cout << std::endl;
 
         // std::cout << expr->eval() << std::endl;
     }
