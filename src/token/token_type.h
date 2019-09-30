@@ -39,7 +39,7 @@ namespace Cerberus {
 
         LET, CONST, FUNC, // Declaração de variáveis, constantes, ou funções
         IF, ELSE, ELIF,   // Estruturas de desvio condicional
-        WHILE, FOR,       // Estruturas de laço condicional
+        WHILE, FOR, PRINT, // Estruturas de laço condicional
 
         // Tipos de dados
         INT, UINT, DOUBLE, 

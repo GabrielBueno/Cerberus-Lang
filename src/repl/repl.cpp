@@ -35,17 +35,17 @@ namespace Cerberus {
             return;
         }
 
-        // std::cout << "Parsing expression: " << _cmd_to_exec << std::endl;
+        std::cout << "Parsing expression: " << _cmd_to_exec << std::endl;
 
-        // Lexer lexer(_cmd_to_exec);
-        // std::unique_ptr<std::vector<Token>> tokens = lexer.tokens();
+        Lexer lexer(_cmd_to_exec);
+        std::unique_ptr<std::vector<Token>> tokens = lexer.tokens();
 
         // Parser parser(*tokens);
         // std::unique_ptr<Expr> expr = parser.parse();
 
-        // // Debug
-        // std::cout << std::endl;
-        // Debugger::print(*tokens);
+        // Debug
+        std::cout << std::endl;
+        Debugger::print(*tokens);
         // std::cout << std::endl;
         // Debugger::print(*expr);
         // std::cout << std::endl;

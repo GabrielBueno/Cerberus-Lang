@@ -26,16 +26,12 @@ namespace Cerberus {
         return nullptr;
     }
 
-    std::unique_ptr<Statement> expression_statement() {
-        return nullptr;
-    }
-
-
     std::unique_ptr<Statement> Parser::expression_statement() {
         std::unique_ptr<Expr> expr = expression();
 
         return std::make_unique<ExpressionStatement>(std::move(expr));
     }
+
 
     std::unique_ptr<Expr> Parser::expression() {
         return sum();

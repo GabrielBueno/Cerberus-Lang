@@ -2,6 +2,7 @@
 #define CERBERUS_LEXER_H_
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 #include <string>
 
@@ -41,8 +42,12 @@ namespace Cerberus {
         void add_token(TokenType);
         void add_token(TokenType, std::string);
 
+        void load_reserved_keywords_map();
+        TokenType identifier_type(const std::string& identifier);
+
         unsigned int _current_char;
         std::string _input;
+        std::unordered_map<std::string, TokenType> _reserved_keywords;
         std::unique_ptr<std::vector<Token>> _tokens;
     };
 }

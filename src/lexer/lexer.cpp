@@ -12,6 +12,7 @@ namespace Cerberus {
         _input(input),
         _tokens(std::make_unique<std::vector<Token>>())
     {
+        load_reserved_keywords_map();
     }
 
     Lexer::~Lexer() {}
@@ -40,6 +41,9 @@ namespace Cerberus {
 
                 case '(': add_token(LEFT_PAREN,  "("); break;
                 case ')': add_token(RIGHT_PAREN, ")"); break;
+
+                case '=': add_token(EQUAL,     "="); break;
+                case ';': add_token(SEMICOLON, ";"); break;
 
                 default:
                     if (is_numeric(current()))
@@ -139,6 +143,7 @@ namespace Cerberus {
 
     void Lexer::add_identifier() {
         std::stringstream identifier;
+        std::string identifier_str;
 
         while (is_alphanumeric(current())) {
             identifier << current();
@@ -149,7 +154,9 @@ namespace Cerberus {
                 break;
         }
 
-        add_token(IDENTIFIER, identifier.str());
+        identifier_str = identifier.str();
+
+        add_token(identifier_type(identifier_str), identifier_str);
     }
 
     void Lexer::add_token(Token token) {
@@ -162,5 +169,20 @@ namespace Cerberus {
 
     void Lexer::add_token(TokenType type, std::string lexeme) {
         _tokens->push_back(Token(type, lexeme));
+    }
+
+
+    void Lexer::load_reserved_keywords_map() {
+        _reserved_keywords["let"]   = LET;
+        _reserved_keywords["print"] = PRINT;
+    }
+
+    TokenType Lexer::identifier_type(const std::string& identifier) {
+        bool is_reserved = _reserved_keywords.find(identifier) != _reserved_keywords.end();
+
+        if (is_reserved)
+            return _reserved_keywords[identifier];
+
+        return IDENTIFIER;
     }
 }
