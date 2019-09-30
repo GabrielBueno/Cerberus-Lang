@@ -13,16 +13,39 @@ namespace Cerberus {
     /* Métodos públicos */
 
     std::unique_ptr<Statement> Parser::parse() {
-        return expression_statement();
+        return variable_declaration();
     }
 
     /* Métodos privados */
 
-    std::unique_ptr<Statement> variable_declaration() {
-        return nullptr;
+    std::unique_ptr<Statement> Parser::variable_declaration() {
+        std::unique_ptr<Expr> expr;
+
+        if (match(LET)) {
+            consume();
+
+            if (match(IDENTIFIER)) {
+                const Token& identifier = consume();
+
+                if (match(EQUAL)) {
+                    consume();
+
+                    expr = expression();
+                }
+
+                if (!match(SEMICOLON)) {
+                    std::cout << "Error: expected semicolon" << std::endl;
+                }
+
+                return std::make_unique<VariableStatement>(std::make_unique<Token>(identifier), expr ? std::move(expr) : nullptr);
+            }
+        }
+
+        consume();
+        return print_statement();
     }
 
-    std::unique_ptr<Statement> print_statement() {
+    std::unique_ptr<Statement> Parser::print_statement() {
         return nullptr;
     }
 
