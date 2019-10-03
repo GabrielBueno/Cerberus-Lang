@@ -1,6 +1,7 @@
 #include "statement.h"
 
 #include <sstream>
+#include <iostream>
 
 namespace Cerberus {
 	VariableStatement::VariableStatement(std::unique_ptr<Token> identifier, std::unique_ptr<Expr> expr) :
@@ -15,6 +16,8 @@ namespace Cerberus {
 	PrintStatement::PrintStatement(std::unique_ptr<Expr> expr) :
 		_expr(std::move(expr))
 	{}
+
+	/* -------------------------------------------------- */
 
 	std::string Statement::describe() const {
 		return "Abstract statement";
@@ -47,5 +50,31 @@ namespace Cerberus {
 		stream << "Exibindo na tela expressão... Com valor final " << _expr->eval();
 
 		return stream.str();
+	}
+
+
+	/* -------------------------------------------------- */
+
+	void Statement::run(Interpreter*) const {}
+
+	void VariableStatement::run(Interpreter* interpreter) const {
+		if (interpreter == nullptr)
+			return;
+
+		interpreter->put_in_memory(_identifier->lexeme(), _initial_expr->eval());
+	}
+
+	void ExpressionStatement::run(Interpreter* interpreter) const {
+		if (interpreter == nullptr)
+			return;
+
+		
+	}
+
+	void PrintStatement::run(Interpreter* interpreter) const {
+		if (interpreter == nullptr)
+			return;
+
+		std::cout << _expr->eval() << std::endl;
 	}
 }

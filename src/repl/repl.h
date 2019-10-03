@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "../interpreter/interpreter.h"
+
 namespace Cerberus {
     class Repl {
     public:
@@ -18,6 +20,8 @@ namespace Cerberus {
 
         std::string _cmd_to_exec;
         bool _is_running;
+
+        Interpreter _interpreter;
     };
 }
 

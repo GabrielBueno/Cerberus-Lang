@@ -10,8 +10,9 @@ STMT_SRC   = ./src/stmt/statement.cpp
 REPL_SRC   = ./src/repl/repl.cpp
 DATA_SRC   = ./src/data/number.cpp
 UTILS_SRC  = ./src/utils/debugger.cpp
+INTERPRETER_SRC = ./src/memory/memory.cpp ./src/interpreter/interpreter.cpp
 
-SOURCE     = ${MAIN_SRC} ${LEXER_SRC} ${PARSER_SRC} ${EXPR_SRC} ${STMT_SRC} ${DATA_SRC} ${REPL_SRC} ${UTILS_SRC}
+SOURCE     = ${MAIN_SRC} ${LEXER_SRC} ${PARSER_SRC} ${EXPR_SRC} ${STMT_SRC} ${DATA_SRC} ${REPL_SRC} ${UTILS_SRC} ${INTERPRETER_SRC}
 
 all:
 	${COMPILER} ${SOURCE} -g -o ${OUTPUT} ${FLAGS}
