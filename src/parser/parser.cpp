@@ -41,7 +41,7 @@ namespace Cerberus {
             }
         }
 
-        consume();
+        // consume();
         return print_statement();
     }
 

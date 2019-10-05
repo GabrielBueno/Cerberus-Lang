@@ -61,20 +61,20 @@ namespace Cerberus {
 		if (interpreter == nullptr)
 			return;
 
-		interpreter->put_in_memory(_identifier->lexeme(), _initial_expr->eval());
+		interpreter->put_in_memory(_identifier->lexeme(), _initial_expr->eval(interpreter));
 	}
 
 	void ExpressionStatement::run(Interpreter* interpreter) const {
 		if (interpreter == nullptr)
 			return;
 
-		
+		std::cout << _expr->eval(interpreter) << std::endl;
 	}
 
 	void PrintStatement::run(Interpreter* interpreter) const {
 		if (interpreter == nullptr)
 			return;
 
-		std::cout << _expr->eval() << std::endl;
+		std::cout << _expr->eval(interpreter) << std::endl;
 	}
 }

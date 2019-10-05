@@ -17,6 +17,16 @@ namespace Cerberus {
         return expr_evaluated;
     }
 
+    double UnaryExpr::eval(Interpreter* interpreter) {
+        TokenType type        = _operator->type();
+        double expr_evaluated = _expr->eval(interpreter);
+
+        if (type == MINUS)
+            return -expr_evaluated;
+
+        return expr_evaluated;
+    }
+
     std::string UnaryExpr::print() const {
         std::stringstream expr_stream;
 

@@ -19,11 +19,11 @@ namespace Cerberus {
         std::unique_ptr<Statement> stmt = parser.parse();
 
         // Debug
-        std::cout << std::endl;
+        std::cout << "Tokens: " << std::endl;
         Debugger::print(*tokens);
         std::cout << std::endl;
-        Debugger::print(*stmt);
-        std::cout << std::endl;
+        // Debugger::print(*stmt);
+        // std::cout << std::endl;
 
         stmt->run(this);
 	}

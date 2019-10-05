@@ -9,6 +9,10 @@ namespace Cerberus {
         return _expr->eval();
     }
 
+    double GroupingExpr::eval(Interpreter* interpreter) {
+        return _expr->eval(interpreter);
+    }
+
     std::string GroupingExpr::print() const {
         std::stringstream expr_stream;
 

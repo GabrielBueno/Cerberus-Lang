@@ -36,10 +36,10 @@ namespace Cerberus {
             return;
         }
 
-        std::cout << "Parsing expression: " << _cmd_to_exec << std::endl;
+        std::cout << "Expressão: " << _cmd_to_exec << "\n\n";
 
         _interpreter.interpret(_cmd_to_exec);
-        std::cout << _interpreter.print_memory() << std::endl;
+        std::cout << "\nMemória: \n" << _interpreter.print_memory() << std::endl;
 
         // std::cout << expr->eval() << std::endl;
     }

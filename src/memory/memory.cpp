@@ -4,6 +4,8 @@
 #include <sstream>
 
 namespace Cerberus {
+	Memory::Memory() {}
+
 	void Memory::put(std::string key, double value) {
 		if (has(key)) {
 			std::cout << "Variable " << key << " already defined" << std::endl;
@@ -32,7 +34,7 @@ namespace Cerberus {
 
 
 	bool Memory::has(std::string key) {
-		return _double_memory.find(key) == _double_memory.end();
+		return _double_memory.find(key) != _double_memory.end();
 	}
 
 	std::string Memory::print() {

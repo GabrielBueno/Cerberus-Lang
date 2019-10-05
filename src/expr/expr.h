@@ -7,6 +7,7 @@
 
 #include "../token/token.h"
 #include "../data/number.h"
+#include "../interpreter/interpreter.h"
 
 namespace Cerberus {
     class Expr {
@@ -14,6 +15,7 @@ namespace Cerberus {
         Expr();
 
         virtual double eval();
+        virtual double eval(Interpreter*);
         virtual std::string print() const;
     };
 
@@ -26,6 +28,7 @@ namespace Cerberus {
         const Token& get_operator();
 
         double eval();
+        double eval(Interpreter*);
         std::string print() const;
 
     private:
@@ -42,6 +45,7 @@ namespace Cerberus {
         const Token& get_operator();
 
         double eval();
+        double eval(Interpreter*);
         std::string print() const;
 
     private:
@@ -56,6 +60,7 @@ namespace Cerberus {
         const Expr& get_expr();
 
         double eval();
+        double eval(Interpreter*);
         std::string print() const;
 
     private:
@@ -69,6 +74,7 @@ namespace Cerberus {
         const Token& get_literal();
 
         double eval();
+        double eval(Interpreter*);
         std::string print() const;
 
     private:
