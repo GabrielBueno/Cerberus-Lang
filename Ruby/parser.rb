@@ -1,5 +1,3 @@
-require_relative "expr.rb"
-
 class Parser
     def initialize(tokens)
         @tokens  = tokens

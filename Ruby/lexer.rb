@@ -10,6 +10,15 @@ class Lexer
     end
 
     def tokens
+        if @tokens.length == 0
+            tokenize()
+        end
+
+        @tokens
+    end
+
+private
+    def tokenize
         while (not ended?)
             case current
             when "("
@@ -43,11 +52,8 @@ class Lexer
 
             move_forward()
         end
-
-        return @tokens
     end
 
-private
     def move_forward
         @current += 1
     end
