@@ -13,9 +13,9 @@ class Lexer
         while (not ended?)
             case current
             when "("
-                add_token(:right_paren, "(")
+                add_token(:left_paren, "(")
             when ")"
-                add_token(:left_paren, ")")
+                add_token(:right_paren, ")")
 
             when "+"
                 add_token(:plus, "+")
@@ -106,10 +106,11 @@ private
 
         while (numeric?(current()) || current?("."))
             # Verifica se é um número decimal
-            _is_decimal = !_is_decimal && current?(".")
-
-            # Caso encontre dois '.' no número, encerra o loop
-            break if current?(".") && _is_decimal
+            if current?(".") && !_is_decimal
+                _is_decimal = true
+            elsif current?(".") && _is_decimal
+                break # Caso encontre dois '.' no número, encerra o loop
+            end
 
             # Concatena o caracter na cadeia que representa o número
             _number += current()

@@ -92,7 +92,7 @@ private
     end
 
     def current?(token_type)
-        current().type == token_type
+        current() != nil && current().type == token_type
     end
 
     def next_token
