@@ -1,3 +1,12 @@
+###
+# -----------------------------------------
+# Token
+#
+# Representa uma parte atômica da linguagem,
+# possuindo um tipo, e um lexema específico,
+# cuja utilidade depende do seu tipo
+# -----------------------------------------
+###
 class Token
     attr_accessor :type
     attr_accessor :lexeme

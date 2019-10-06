@@ -1,6 +1,22 @@
 require_relative "token.rb"
 
+###
+# --------------------------
+# Lexer
+#
+# Máquina que transforma uma cadeida de caracteres (string), em uma cadeia
+# de Tokens (lexemas) que constituem a linguagem
+#
+# Atributos:
+#   - input: a cadeia de caracteres de entrada
+#   - tokens: a lista de Tokens gerada como saída
+#   - errors: uma lista de erros encontrados durante o processo de reconhecimento
+#   - current: aponta para qual caracter da entrada que está sendo lido no estado corrente
+#   - reserved_keywords: lista com as palavras reservadas da linguagem
+# --------------------------
+###
 class Lexer
+    # Construtor, recebe uma string, sobre a qual irá trabalhar
     def initialize(input)
         @input   = input
         @tokens  = []
@@ -9,6 +25,8 @@ class Lexer
         @reserved_keywords = {"let" => :let}
     end
 
+    # Caso a lista de Tokens ainda não tenha sido gerada, realiza tal operação.
+    # Caso já tenha sido gerada, somente retorna o resultado já obtido anteriormente
     def tokens
         if @tokens.length == 0
             tokenize()
@@ -18,6 +36,8 @@ class Lexer
     end
 
 private
+    # Itera sobre cada caracter da entrada, realizando a sua conversão
+    # para a uma lista de Tokens da linguagem
     def tokenize
         while (not ended?)
             case current
@@ -54,58 +74,74 @@ private
         end
     end
 
+    # Avança o ponteiro @current em uma posição
     def move_forward
         @current += 1
     end
 
+    # Recua o ponteiro em uma posição
     def move_backwards
         @current = @current == 0 ? 0 : @current - 1
     end
 
+    # Obtém o caracter lido atualmente
     def current
         @input[@current]
     end
 
+    # Verifica se o caracter lido atualmente possui um determinado valor
     def current?(match)
         current() == match
     end
 
+    # Obtém o caracter que está a uma posição atrás do ponteiro @current
     def previous
         @current > 0 ? @input[@current - 1] : nil
     end
 
+    # Verifica se o caracter que está a uma posição atrás do ponteiro possui um determinado valor
     def previous?(match)
         previous() == match
     end
 
+    # Obtém o caracter que está a uma posição a frente do ponteiro @current
     def next_ch
         @input[@current + 1]
     end
 
+    # Verifica se o caracter que está a uma posição a frente do ponteiro possui um determinado valor
     def next_ch?(match)
         next_ch() == match
     end
 
+    # Verifica se, a partir da posição do ponteiro, já alcançou-se o fim da cadeia de caracteres
     def ended?
         @current >= @input.length
     end
 
+    # Verifica se determinado valor (string) é numérico
     def numeric?(value)
         value != nil && value >= "0" && value <= "9"
     end
 
+    # Verifica se determinado valor é alfabético, incluindo o caracter _
     def alpha?(value)
         value != nil && value == "_" || (value >= "a" && value <= "z") || (value >= "A" && value <= "Z")
     end
 
+    # Verifica se determinado valor é alfanumérico
     def alphanumeric?(value)
         numeric?(value) || alpha?(value)
     end
 
+    # Adiciona um token à lista de tokens gerados como saída
     def add_token(token_type, lexeme = "")
         @tokens.push Token.new token_type, lexeme
     end
 
+    # Avança sobre a entrada enquanto o valor apontado for numérico, ou o caracter '.', concatenando
+    # esses valores em uma string. Ao fim do processo, adiciona um token à saída com esta string
+    # como lexema
     def add_number
         _is_decimal = false
         _number     = ""
@@ -131,6 +167,9 @@ private
         add_token(_is_decimal ? :double : :integer, _number)
     end
 
+    # Avança sobre a entrada enquanto o valor apontado for alfanumérico, concatenando
+    # esses valores em uma string. Ao fim do processo, adiciona um token à saída com esta 
+    # string como lexema, com o tipo específico caso for uma palavra reservada
     def add_identifier
         _identifier = ""
 
