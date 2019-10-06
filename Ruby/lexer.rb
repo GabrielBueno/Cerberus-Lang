@@ -13,23 +13,23 @@ class Lexer
         while (not ended?)
             case current
             when "("
-                add_token(:right_paren)
+                add_token(:right_paren, "(")
             when ")"
-                add_token(:left_paren)
+                add_token(:left_paren, ")")
 
             when "+"
-                add_token(:plus)
+                add_token(:plus, "+")
             when "-"
-                add_token(:minus)
+                add_token(:minus, "-")
             when "*"
-                add_token(:star)
+                add_token(:star, "*")
             when "/"
-                add_token(:slash)
+                add_token(:slash, "/")
 
             when "="
-                add_token(:equal)
+                add_token(:equal, "=")
             when ";"
-                add_token(:semicolon)
+                add_token(:semicolon, ";")
 
             else
                 if numeric?(current())
@@ -85,11 +85,11 @@ private
     end
 
     def numeric?(value)
-        value >= "0" && value <= "9"
+        value != nil && value >= "0" && value <= "9"
     end
 
     def alpha?(value)
-        value == "_" || (value >= "a" && value <= "z") || (value >= "A" && value <= "Z")
+        value != nil && value == "_" || (value >= "a" && value <= "z") || (value >= "A" && value <= "Z")
     end
 
     def alphanumeric?(value)

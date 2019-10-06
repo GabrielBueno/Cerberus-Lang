@@ -1,14 +1,9 @@
 class Token
-    def initialize(type_symbol, lexeme = "")
-        @type_symbol = type_symbol
-        @lexeme      = lexeme
-    end
+    attr_accessor :type
+    attr_accessor :lexeme
 
-    def type
-        return @type_symbol
-    end
-
-    def lexeme
-        return @lexeme
+    def initialize(type, lexeme = "")
+        @type   = type
+        @lexeme = lexeme
     end
 end
