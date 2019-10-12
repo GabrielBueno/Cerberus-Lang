@@ -44,7 +44,18 @@ class Parser
     end
 
     def expression
-        sum
+        boolean
+    end
+
+    def boolean
+        _expression = sum()
+
+        while current?(:equal_equal) || current?(:not_equal) || current?(:greater) || current?(:greater_equal) || current?(:lesser) || current?(:lesser_equal)
+            _operator = consume()
+            _expression = BinaryExpr.new(_expression, _operator, sum())
+        end
+
+        _expression
     end
 
     def sum
@@ -84,7 +95,7 @@ class Parser
     end
 
     def unary
-        if current?(:minus)
+        if current?(:minus) || current?(:not)
             _operator = consume()
             return UnaryExpr.new(_operator, literal())
         else

@@ -56,7 +56,37 @@ private
                 add_token(:slash, "/")
 
             when "="
-                add_token(:equal, "=")
+                if next_ch?("=")
+                    add_token(:equal_equal, "==")
+                    move_forward()
+                else
+                    add_token(:equal, "=")
+                end
+
+            when ">"
+                if next_ch?("=")
+                    add_token(:greater_equal, ">=")
+                    move_forward()
+                else
+                    add_token(:greater, ">")
+                end
+
+            when "<"
+                if next_ch?("=")
+                    add_token(:lesser_equal, "<=")
+                    move_forward()
+                else
+                    add_token(:lesser, "<")
+                end
+
+            when "!"
+                if next_ch?("=")
+                    add_token(:not_equal, "!=")
+                    move_forward()
+                else
+                    add_token(:not, "!")
+                end
+
             when ";"
                 add_token(:semicolon, ";")
 

@@ -5,7 +5,7 @@ require_relative "parser.rb"
 require_relative "expr_visitor.rb"
 require_relative "cerberus_utils.rb"
 
-l = Lexer.new "let a = 6 + 5 * (1 + 5.6) / 5"
+l = Lexer.new "let a = 6 + 5 * (1 + 5.6) / 5 > 1 + 2"
 
 Printer.print_tokens l.tokens
 
