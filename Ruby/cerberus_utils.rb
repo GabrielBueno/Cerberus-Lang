@@ -1,4 +1,4 @@
-class PrintExprVisitor < ExprVisitor
+class AstPrinterVisitor < ExprVisitor
     def visit_binary(expr)
         "(#{expr.operator.lexeme} #{expr.left.accept(self)} #{expr.right.accept(self)})"
     end
@@ -13,6 +13,14 @@ class PrintExprVisitor < ExprVisitor
 
     def visit_literal(expr)
         "#{expr.token.lexeme}"
+    end
+
+    def visit_assignment(stmt)
+        "let #{stmt.identifier.lexeme} #{stmt.assignment_op.lexeme} #{stmt.expr.accept(self)}"
+    end
+
+    def visit_print(stmt)
+        "print #{stmt.expr.accept(self)}"
     end
 end
 

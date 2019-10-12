@@ -5,15 +5,42 @@ class Parser
     end
 
     def parse
-        expression()
+        assignment()
     end
 
     def assignment
+        if current?(:let)
+            consume()
 
+            if !current?(:identifier)
+                puts "Expected identifier"
+
+                return print_stmt
+            end
+
+            identifier = consume()
+
+            if !current?(:equal)
+                puts "Expected assignment operation"
+
+                return print_stmt
+            end
+
+            assignment_op = consume()
+
+            return AssignmentStmt.new(identifier, assignment_op, expression())
+        end
+
+        print_stmt
     end
 
-    def print
+    def print_stmt
+        if !current?(:print)
+            return expression()
+        end
 
+        consume()
+        return PrintStmt.new(expression())
     end
 
     def expression
