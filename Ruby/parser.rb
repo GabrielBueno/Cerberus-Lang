@@ -5,7 +5,125 @@ class Parser
     end
 
     def parse
-        assignment()
+        if_stmt
+    end
+
+    def block
+        if !current?(:left_curly_brackets)
+            puts "Expected opening curly brackets!"
+            exit
+        end
+
+        # Elimina a chave de abertura
+        consume()
+
+        _block = Block.new
+
+        while (!current?(:right_curly_brackets))
+            if ended?()
+                puts "Expected closing curly brackets!"
+                exit
+            end
+
+            _block.add_stmt(if_stmt())
+        end
+
+        # Elimina a chave de fechamento
+        consume()
+
+        _block
+    end
+
+    def elif_stmt
+        if (!current?(:elif))
+            return else_stmt
+        end
+
+        consume()
+
+        # Verifica o parênteses de abertura
+        if !current?(:left_paren)
+            puts "Expected opening parentheses!"
+
+            return assignment
+        end
+
+        # Elimina o parênteses de abertura
+        consume()
+
+        _expression = expression
+
+        # Verifica o parênteses de fechamento
+        if !current?(:right_paren)
+            puts "Expected closing parentheses"
+
+            return assignment
+        end
+
+        # Elimina o parênteses de fechamento
+        consume()
+
+        _block = block
+
+        IfStmt::Elif.new _expression, _block
+    end
+
+    def else_stmt
+        if (!current?(:else))
+            return else_stmt
+        end
+
+        consume()
+
+        _block = block
+
+        IfStmt::Else.new _block
+    end
+
+    def if_stmt
+        if current?(:if)
+            consume()
+
+            # Verifica o parênteses de abertura
+            if !current?(:left_paren)
+                puts "Expected opening parentheses!"
+
+                return assignment
+            end
+
+            # Elimina o parênteses de abertura
+            consume()
+
+            # Constrói a árvore de expressões
+            _expression = expression
+
+            # Verifica o parênteses de fechamento
+            if !current?(:right_paren)
+                puts "Expected closing parentheses"
+
+                return assignment
+            end
+
+            # Elimina o parênteses de fechamento
+            consume()
+
+            _block   = block
+            _if_stmt = IfStmt.new _expression, _block
+
+            # Verifica se existem elif's
+            while (current?(:elif))
+                _if_stmt.add_elif elif_stmt
+            end
+
+            # Verifica se existe else
+            if (current?(:else))
+                _if_stmt.set_else else_stmt
+            end
+
+            return _if_stmt
+        end
+
+        assignment
     end
 
     def assignment
@@ -145,5 +263,9 @@ private
 
     def previous?(type)
         previous().type == type
+    end
+
+    def ended?
+        @current >= @tokens.length
     end
 end

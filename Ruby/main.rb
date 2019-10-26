@@ -5,12 +5,46 @@ require_relative "parser.rb"
 require_relative "expr_visitor.rb"
 require_relative "cerberus_utils.rb"
 
-l = Lexer.new "let a = 6 + 5 * (1 + 5.6) / 5 > !1 + -2; let b = 5 + 9"
+def test
+    l = Lexer.new "let a = 6 + 5 * (1 + 5.6) / 5 > 1 + 2"
+    
+    Printer.print_tokens l.tokens
 
-Printer.print_tokens l.tokens
+    parser = Parser.new l.tokens
+    ast    = parser.parse
 
-parser = Parser.new l.tokens
-ast    = parser.parse
+    puts ast.accept(AstPrinterVisitor.new)
+end
 
-puts ast.accept(AstPrinterVisitor.new)
+def repl
+    while true
+        print ">> "
 
+        input  = gets.chomp
+
+        if input == "quit"
+            puts "Bye.\n\n"
+            break
+        end
+
+        lexer  = Lexer.new  input
+        parser = Parser.new lexer.tokens
+        ast    = parser.parse
+
+        puts ast.accept(AstPrinterVisitor.new)
+    end
+end
+
+def exec_arg
+    return if not ARGV[0]
+
+    puts ARGV
+
+    lexer  = Lexer.new  ARGV[0]
+    parser = Parser.new lexer.tokens
+    ast    = parser.parse
+
+    puts ast.accept(AstPrinterVisitor.new)
+end
+
+exec_arg

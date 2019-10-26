@@ -22,7 +22,13 @@ class Lexer
         @tokens  = []
         @errors  = []
         @current = 0
-        @reserved_keywords = {"let" => :let}
+        @reserved_keywords = {
+            "let"     => :let,
+            "if"      => :if,
+            "else"    => :else,
+            "elif"    => :elif,
+            "print"   => :print
+        }
     end
 
     # Caso a lista de Tokens ainda não tenha sido gerada, realiza tal operação.
@@ -45,6 +51,10 @@ private
                 add_token(:left_paren, "(")
             when ")"
                 add_token(:right_paren, ")")
+            when "{"
+                add_token(:left_curly_brackets)
+            when "}"
+                add_token(:right_curly_brackets)
 
             when "+"
                 add_token(:plus, "+")

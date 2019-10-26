@@ -22,6 +22,38 @@ class AstPrinterVisitor < ExprVisitor
     def visit_print(stmt)
         "print #{stmt.expr.accept(self)}"
     end
+
+    def visit_if(stmt)
+        _pretty = "if #{stmt.expr.accept(self)} then #{stmt.block.accept(self)}"
+
+        if (stmt.has_elif?)
+            stmt.elif_stmts.each { |stmt| _pretty += "\n" + stmt.accept(self) }
+        end
+
+        if (stmt.has_else?)
+            _pretty += "\n#{stmt.else_stmt.accept(self)}"
+        end
+
+        _pretty
+    end
+
+    def visit_else(stmt)
+        "else #{stmt.block.accept(self)}"
+    end
+
+    def visit_elif(stmt)
+        "elif #{stmt.expr.accept(self)} then #{stmt.block.accept(self)}"
+    end
+
+    def visit_block(block)
+        _pretty = "\n{\n"
+
+        block.stmts.each { |stmt| _pretty += stmt.accept(self) + "\n" }
+
+        _pretty += "}\n"
+
+        _pretty
+    end
 end
 
 class Printer
