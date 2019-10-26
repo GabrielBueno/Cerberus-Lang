@@ -156,7 +156,7 @@ private
 
     # Verifica se determinado valor é alfabético, incluindo o caracter _
     def alpha?(value)
-        value != nil && value == "_" || (value >= "a" && value <= "z") || (value >= "A" && value <= "Z")
+        value != nil && (value == "_" || (value >= "a" && value <= "z") || (value >= "A" && value <= "Z"))
     end
 
     # Verifica se determinado valor é alfanumérico

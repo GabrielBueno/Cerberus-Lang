@@ -9,7 +9,7 @@ class Parser
     end
 
     def assignment
-        if current?(:let)
+        while current?(:let)
             consume()
 
             if !current?(:identifier)
