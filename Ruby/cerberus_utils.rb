@@ -45,6 +45,10 @@ class AstPrinterVisitor < ExprVisitor
         "elif #{stmt.expr.accept(self)} then #{stmt.block.accept(self)}"
     end
 
+    def visit_while(stmt)
+        "while #{stmt.expr.accept(self)} do #{stmt.block.accept(self)}"
+    end
+
     def visit_block(block)
         _pretty = "\n{\n"
 

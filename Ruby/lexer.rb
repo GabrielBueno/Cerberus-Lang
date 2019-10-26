@@ -27,7 +27,8 @@ class Lexer
             "if"      => :if,
             "else"    => :else,
             "elif"    => :elif,
-            "print"   => :print
+            "print"   => :print,
+            "while"   => :while
         }
     end
 

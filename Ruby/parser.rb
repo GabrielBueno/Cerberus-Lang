@@ -5,7 +5,7 @@ class Parser
     end
 
     def parse
-        if_stmt
+        while_stmt
     end
 
     def block
@@ -34,6 +34,36 @@ class Parser
         _block
     end
 
+    def while_stmt
+        if !current?(:while)
+            return if_stmt
+        end
+
+        consume()
+
+        if !current?(:left_paren)
+            puts "Expected opening parentheses in while block!"
+
+            return assignment
+        end
+
+        consume()
+
+        _expression = expression
+
+        if !current?(:right_paren)
+            puts "Expected closing parentheses!"
+
+            return assignment
+        end
+
+        consume()
+
+        _block = block
+
+        WhileStmt.new _expression, _block
+    end
+
     def elif_stmt
         if (!current?(:elif))
             return else_stmt
@@ -43,7 +73,7 @@ class Parser
 
         # Verifica o parênteses de abertura
         if !current?(:left_paren)
-            puts "Expected opening parentheses!"
+            puts "Expected opening parentheses in elif block!"
 
             return assignment
         end
@@ -86,7 +116,7 @@ class Parser
 
             # Verifica o parênteses de abertura
             if !current?(:left_paren)
-                puts "Expected opening parentheses!"
+                puts "Expected opening parentheses in if block!"
 
                 return assignment
             end

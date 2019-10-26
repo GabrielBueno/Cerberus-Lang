@@ -109,6 +109,20 @@ class IfStmt < Stmt
     end
 end
 
+class WhileStmt
+    attr_accessor :expr
+    attr_accessor :block
+
+    def initialize(expr, block)
+        @expr  = expr
+        @block = block
+    end
+
+    def accept(visitor)
+        visitor.visit_while(self)
+    end
+end
+
 class Block
     attr_accessor :stmts
 

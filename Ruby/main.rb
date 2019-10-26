@@ -7,7 +7,7 @@ require_relative "cerberus_utils.rb"
 
 def test
     l = Lexer.new "let a = 6 + 5 * (1 + 5.6) / 5 > 1 + 2"
-    
+
     Printer.print_tokens l.tokens
 
     parser = Parser.new l.tokens
@@ -41,10 +41,14 @@ def exec_arg
     puts ARGV
 
     lexer  = Lexer.new  ARGV[0]
+
+    Printer.print_tokens lexer.tokens
+
     parser = Parser.new lexer.tokens
     ast    = parser.parse
 
     puts ast.accept(AstPrinterVisitor.new)
 end
 
-exec_arg
+#exec_arg
+repl
