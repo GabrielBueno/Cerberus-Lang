@@ -125,16 +125,19 @@ class Variable
     attr_accessor :value
 
     def initialize(identifier, mutable, type, value)
-        @mutable = mutable
-        @type    = type
-        @value   = value
+        @identifier = identifier
+        @mutable    = mutable
+        @type       = type
+        @value      = value
+
+        validate_type
     end
 
 private
     def validate_type
         return if valid_type?
 
-        puts "Type #{@type} of variable #{@identifier} is not a valid type"
+        puts "ERROR: Type '#{@type.lexeme}' of variable '#{@identifier}' is not a valid type"
         exit
     end
 
@@ -143,6 +146,6 @@ private
     end
 
     def valid_type?
-        self.TYPES.include? @type
+        TYPES.include? @type
     end
 end
