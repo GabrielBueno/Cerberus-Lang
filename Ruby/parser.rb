@@ -227,7 +227,7 @@ class Parser
 
     def assignment
         if !current?(:identifier)
-            return expression
+            return expression_stmt
         end
 
         identifier = consume()
@@ -235,12 +235,16 @@ class Parser
         if !current?(:equal)
             puts "Expected assignment operation on redeclaration"
 
-            return expression
+            return expression_stmt
         end
 
         assignment_op = consume()
 
         return AssignmentStmt.new(identifier, assignment_op, expression())
+    end
+
+    def expression_stmt
+        return ExprStmt.new expression
     end
 
     def expression

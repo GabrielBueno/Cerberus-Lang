@@ -1,19 +1,11 @@
-print "Hello World!"
-
 5 + 9 + 8
 
 let a: u8
 let b: u8 = 5 * 9 + 7
+let c: u32
 
-let mut c: u8
-let mut d: u8
-
-c = 6
-
-if (c >= 9) {
-    d = 10
-} elif (c >= 5) {
-    d = 6
-} else {
-    d = 3
+if (6 < 9) {
+    if (7 > 3) {
+        let c: u8 = 7
+    }
 }

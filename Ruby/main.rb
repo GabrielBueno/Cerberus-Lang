@@ -3,6 +3,7 @@ require_relative "expr.rb"
 require_relative "stmt.rb"
 require_relative "parser.rb"
 require_relative "expr_visitor.rb"
+require_relative "cerberus_machine.rb"
 require_relative "cerberus_utils.rb"
 
 def test
@@ -41,12 +42,15 @@ def exec_file
     file  = File.open(ARGV[0])
     lexer = Lexer.new file.read.chomp
 
-    Printer.print_tokens lexer.tokens
+    # Printer.print_tokens lexer.tokens
 
     parser = Parser.new lexer.tokens
     ast    = parser.parse
 
-    puts ast.accept(AstPrinterVisitor.new)
+    # puts ast.accept(AstPrinterVisitor.new)
+
+    machine = CerberusMachine.new ast
+    machine.run()
 end
 
 if ARGV[0] 

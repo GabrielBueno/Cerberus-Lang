@@ -5,8 +5,8 @@ end
 class ProgramStmt
     attr_accessor :stmts
 
-    def initialize
-        @stmts = []
+    def initialize(stmts=[])
+        @stmts = stmts
     end
 
     def add_stmt(stmt)

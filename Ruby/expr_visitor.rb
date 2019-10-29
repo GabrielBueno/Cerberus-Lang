@@ -32,6 +32,19 @@ class ExprEvaluator < ExprVisitor
             _result = _left_evaluated * _right_evaluated
         when :slash
             _result = _left_evaluated / _right_evaluated
+
+        when :equal_equal
+            _result = _left_evaluated == _right_evaluated
+        when :not_equal
+            _result = _left_evaluated != _right_evaluated
+        when :greater
+            _result = _left_evaluated > _right_evaluated
+        when :greater_equal
+            _result = _left_evaluated >= _right_evaluated
+        when :lesser
+            _result = _left_evaluated < _right_evaluated
+        when :lesser_equal
+            _result = _left_evaluated <= _right_evaluated
         end
 
         _result
@@ -43,6 +56,8 @@ class ExprEvaluator < ExprVisitor
         case expr.operator.type
         when :minus
             _result = -_result
+        when :not
+            _result = !_result
         end
 
         _result
