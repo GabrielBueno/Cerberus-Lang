@@ -1,6 +1,7 @@
 class Parser
     def initialize(tokens)
         @tokens  = tokens
+        @errors  = []
         @current = 0
     end
 
@@ -8,20 +9,28 @@ class Parser
         program
     end
 
+    def has_errors?
+        @errors.length > 0
+    end
+
+    def show_errors
+        @errors.each {|err| puts err }
+    end
+
+private
     def program
         _program = ProgramStmt.new
 
-        while !ended?
-            _program.add_stmt while_stmt
-        end
+        _program.add_stmt(while_stmt()) while !ended?
 
         _program
     end
 
     def block
         if !current?(:left_curly_brackets)
-            puts "Expected opening curly brackets!"
-            exit
+            add_error("Expected opening curly brackets")
+
+            return while_stmt()
         end
 
         # Elimina a chave de abertura
@@ -31,8 +40,7 @@ class Parser
 
         while (!current?(:right_curly_brackets))
             if ended?()
-                puts "Expected closing curly brackets!"
-                exit
+                add_error("Expected closing curly brackets!")
             end
 
             _block.add_stmt(if_stmt())
@@ -52,9 +60,9 @@ class Parser
         consume()
 
         if !current?(:left_paren)
-            puts "Expected opening parentheses in while block!"
+            add_error("Expected opening parentheses in while statement!")
 
-            return assignment
+            return if_stmt
         end
 
         consume()
@@ -62,9 +70,9 @@ class Parser
         _expression = expression
 
         if !current?(:right_paren)
-            puts "Expected closing parentheses!"
+            add_error("Expected closing parentheses in while statement!")
 
-            return assignment
+            return if_stmt
         end
 
         consume()
@@ -83,7 +91,7 @@ class Parser
 
         # Verifica o parênteses de abertura
         if !current?(:left_paren)
-            puts "Expected opening parentheses in elif block!"
+            add_error("Expected opening parentheses in elif statement!")
 
             return assignment
         end
@@ -95,7 +103,7 @@ class Parser
 
         # Verifica o parênteses de fechamento
         if !current?(:right_paren)
-            puts "Expected closing parentheses"
+            add_error "Expected closing parentheses"
 
             return assignment
         end
@@ -126,7 +134,7 @@ class Parser
 
             # Verifica o parênteses de abertura
             if !current?(:left_paren)
-                puts "Expected opening parentheses in if block!"
+                add_error "Expected opening parentheses in if block!"
 
                 return assignment
             end
@@ -139,7 +147,7 @@ class Parser
 
             # Verifica o parênteses de fechamento
             if !current?(:right_paren)
-                puts "Expected closing parentheses"
+                add_error "Expected closing parentheses"
 
                 return assignment
             end
@@ -181,7 +189,7 @@ class Parser
             end
 
             if !current?(:identifier)
-                puts "Expected identifier in variable declaration!"
+                add_error "Expected identifier in variable declaration!"
 
                 return print_stmt
             end
@@ -189,7 +197,7 @@ class Parser
             _identifier = consume()
 
             if !current?(:colon)
-                puts "Expected type definition of variable"
+                add_error "Expected type definition of variable '#{_identifier}'"
 
                 return print_stmt
             end
@@ -197,7 +205,7 @@ class Parser
             consume()
 
             if !current?(:identifier)
-                puts "Expected type definition of variable"
+                add_error "Expected type definition of variable '#{_identifier}'"
 
                 return print_stmt
             end
@@ -233,7 +241,7 @@ class Parser
         identifier = consume()
 
         if !current?(:equal)
-            puts "Expected assignment operation on redeclaration"
+            add_error "Expected assignment operation on redeclaration of variable '#{identifier}'"
 
             return expression_stmt
         end
@@ -313,7 +321,6 @@ class Parser
         LiteralExpr.new _operator
     end
 
-private
     def move_forward
         @current += 1
     end
@@ -351,7 +358,21 @@ private
         previous().type == type
     end
 
+    def jump_to(token_type)
+        while !current?(token_type)
+            move_forward() 
+        end
+    end
+
     def ended?
         @current >= @tokens.length
+    end
+
+    def add_error(message, token=nil, exit_program=false)
+        _token = token || current()
+
+        @errors.push ">>> Parsing error: #{message}\n\tin line #{_token.line} and column #{_token.column}\n\n"
+
+        exit if exit_program
     end
 end

@@ -12,7 +12,7 @@ class CerberusMachine
     def run
         program.stmts.each { |stmt| stmt.accept(self) }
         
-        print_memory()
+        # print_memory()
     end
 
     def visit_print(print_stmt)
@@ -28,7 +28,7 @@ class CerberusMachine
 
         assigned_value = let_stmt.expr ? let_stmt.expr.accept(ExprEvaluator.new) : nil
 
-        add_variable let_stmt.identifier.lexeme, Variable.new(let_stmt.identifier.lexeme, let_stmt.mutable, let_stmt.type, assigned_value)
+        add_variable let_stmt.identifier.lexeme, Variable.new(let_stmt.identifier.lexeme, let_stmt.mutable, let_stmt.type.lexeme, assigned_value)
 
         # print_memory()
     end
@@ -137,7 +137,7 @@ private
     def validate_type
         return if valid_type?
 
-        puts "ERROR: Type '#{@type.lexeme}' of variable '#{@identifier}' is not a valid type"
+        puts "ERROR: Type '#{@type}' of variable '#{@identifier}' is not a valid type"
         exit
     end
 

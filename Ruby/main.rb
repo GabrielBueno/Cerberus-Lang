@@ -20,8 +20,7 @@ end
 def repl
     while true
         print ">> "
-
-        input  = gets.chomp
+        input = gets.chomp
 
         if input == "quit"
             puts "Bye.\n\n"
@@ -42,10 +41,22 @@ def exec_file
     file  = File.open(ARGV[0])
     lexer = Lexer.new file.read.chomp
 
+    if (lexer.has_errors?)
+        lexer.show_errors()
+
+        return
+    end
+
     # Printer.print_tokens lexer.tokens
 
     parser = Parser.new lexer.tokens
     ast    = parser.parse
+
+    if (parser.has_errors?)
+        parser.show_errors()
+
+        return
+    end
 
     # puts ast.accept(AstPrinterVisitor.new)
 

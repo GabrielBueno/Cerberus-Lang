@@ -22,6 +22,8 @@ class Lexer
         @tokens  = []
         @errors  = []
         @current = 0
+        @line    = 0
+        @column  = 0
         @reserved_keywords = {
             "let"     => :let,
             "if"      => :if,
@@ -43,20 +45,35 @@ class Lexer
         @tokens
     end
 
+    # Indica se erros foram encontrados no processo de reconhecimento da entrada
+    def has_errors?
+        @errors.length > 0
+    end
+
+    def show_errors
+        @errors.each {|err| puts err }
+    end
+
 private
     # Itera sobre cada caracter da entrada, realizando a sua conversão
     # para a uma lista de Tokens da linguagem
     def tokenize
         while (not ended?)
             case current
+            when " ", "\r", "\t"
+
+            when "\n"
+                @line  += 1
+                @column = 1
+
             when "("
                 add_token(:left_paren, "(")
             when ")"
                 add_token(:right_paren, ")")
             when "{"
-                add_token(:left_curly_brackets)
+                add_token(:left_curly_brackets, "{")
             when "}"
-                add_token(:right_curly_brackets)
+                add_token(:right_curly_brackets, "}")
 
             when "+"
                 add_token(:plus, "+")
@@ -113,7 +130,7 @@ private
                 elsif alpha?(current())
                     add_identifier()
                 else
-                    @errors.push("Unexpected " + current())
+                    @errors.push("Unexpected #{current()} found on line #{@line} and column #{@column}")
                 end
             end
 
@@ -124,6 +141,7 @@ private
     # Avança o ponteiro @current em uma posição
     def move_forward
         @current += 1
+        @column  += 1
     end
 
     # Recua o ponteiro em uma posição
@@ -183,7 +201,7 @@ private
 
     # Adiciona um token à lista de tokens gerados como saída
     def add_token(token_type, lexeme = "")
-        @tokens.push Token.new token_type, lexeme
+        @tokens.push Token.new token_type, lexeme, @line, @column
     end
 
     # Avança sobre a entrada enquanto o valor apontado for numérico, ou o caracter '.', concatenando
