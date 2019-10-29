@@ -18,12 +18,14 @@ fator     ::= unario | "(" expressao ")"
 unario    ::= ("-" | "!") digito
 
 
-declaracao_variavel ::= "let" identificador "=" expressao ";"
+declaracao_variavel ::= "let" ("mut")? identificador ":" identificador ("=" expressao)? ";"
+redeclaracao ::= identificador "=" expressao ";"
+
 print ::= "print" expressao ";"
 
 se ::= "if" "(" expressao ")" bloco
 
 programa   ::= declaracao+
-declaracao ::= (declaracao_variavel | print)
+declaracao ::= (declaracao_variavel | print | redeclaracao)
 
 bloco ::= "{" programa "}"
