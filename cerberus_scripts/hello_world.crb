@@ -6,6 +6,6 @@ let c: u32
 
 if (6 < 9) {
     if (7 > 3) {
-        let c: u8 = 7
+        print 5 + 8
     }
 }
