@@ -231,6 +231,9 @@ private
         add_token(@reserved_keywords[_identifier] || :identifier, _identifier)
     end
 
+    # Avança sobre a entrada enquanto o valor lido estiver entre um par de aspas,
+    # concatenando estes valores, adicionando estes na lista de tokens, como
+    # um valor literal de string
     def add_string
         _string = ""
 
