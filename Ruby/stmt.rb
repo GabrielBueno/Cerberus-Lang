@@ -2,6 +2,40 @@
 class Stmt
 end
 
+class ProgramStmt
+    attr_accessor :stmts
+
+    def initialize
+        @stmts = []
+    end
+
+    def add_stmt(stmt)
+        @stmts.push stmt
+    end
+
+    def accept(visitor)
+        visitor.visit_program(self)
+    end
+end
+
+class VariableDeclarationStmt < Stmt
+    attr_accessor :mutable
+    attr_accessor :identifier
+    attr_accessor :type
+    attr_accessor :expr
+
+    def initialize(mutable, identifier, type, expr)
+        @mutable    = mutable
+        @identifier = identifier
+        @type       = type
+        @expr       = expr
+    end
+
+    def accept(visitor)
+        visitor.visit_var_declaration(self)
+    end
+end
+
 # Declaração de variável
 class AssignmentStmt < Stmt
     attr_accessor :assignment_op

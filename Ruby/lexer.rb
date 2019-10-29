@@ -28,7 +28,8 @@ class Lexer
             "else"    => :else,
             "elif"    => :elif,
             "print"   => :print,
-            "while"   => :while
+            "while"   => :while,
+            "mut"     => :mut
         }
     end
 
@@ -98,8 +99,13 @@ private
                     add_token(:not, "!")
                 end
 
+            when ":"
+                add_token(:colon, ":")
             when ";"
                 add_token(:semicolon, ";")
+
+            when "\""
+                add_string()
 
             else
                 if numeric?(current())
@@ -223,5 +229,23 @@ private
         move_backwards()
 
         add_token(@reserved_keywords[_identifier] || :identifier, _identifier)
+    end
+
+    def add_string
+        _string = ""
+
+        move_forward()
+
+        while !current?("\"")
+            if ended?
+                @errors.push "String not terminated!"
+                break
+            end
+
+            _string += current()
+            move_forward()
+        end
+
+        add_token(:string, _string)
     end
 end

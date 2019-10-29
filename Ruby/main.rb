@@ -35,12 +35,11 @@ def repl
     end
 end
 
-def exec_arg
+def exec_file
     return if not ARGV[0]
 
-    puts ARGV
-
-    lexer  = Lexer.new  ARGV[0]
+    file  = File.open(ARGV[0])
+    lexer = Lexer.new file.read.chomp
 
     Printer.print_tokens lexer.tokens
 
@@ -50,5 +49,8 @@ def exec_arg
     puts ast.accept(AstPrinterVisitor.new)
 end
 
-#exec_arg
-repl
+if ARGV[0] 
+    exec_file
+else
+    repl
+end

@@ -16,7 +16,7 @@ class AstPrinterVisitor < ExprVisitor
     end
 
     def visit_assignment(stmt)
-        "let #{stmt.identifier.lexeme} #{stmt.assignment_op.lexeme} #{stmt.expr.accept(self)}"
+        "redecl #{stmt.identifier.lexeme} #{stmt.assignment_op.lexeme} #{stmt.expr.accept(self)}"
     end
 
     def visit_print(stmt)
@@ -47,6 +47,20 @@ class AstPrinterVisitor < ExprVisitor
 
     def visit_while(stmt)
         "while #{stmt.expr.accept(self)} do #{stmt.block.accept(self)}"
+    end
+
+    def visit_var_declaration(stmt)
+        "let #{stmt.identifier.lexeme} type #{stmt.type.lexeme} mut #{stmt.mutable} with value #{stmt.expr.accept(self) if stmt.expr != nil}"
+    end
+
+    def visit_program(stmt)
+        _output = "Program:\n\n"
+
+        stmt.stmts.each { |stmt| _output += stmt.accept(self) + "\n" }
+
+        _output += "\nprogram ended\n"
+
+        _output
     end
 
     def visit_block(block)

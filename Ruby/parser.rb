@@ -5,7 +5,17 @@ class Parser
     end
 
     def parse
-        while_stmt
+        program
+    end
+
+    def program
+        _program = ProgramStmt.new
+
+        while !ended?
+            _program.add_stmt while_stmt
+        end
+
+        _program
     end
 
     def block
@@ -141,42 +151,66 @@ class Parser
             _if_stmt = IfStmt.new _expression, _block
 
             # Verifica se existem elif's
-            while (current?(:elif))
+            while current?(:elif)
                 _if_stmt.add_elif elif_stmt
             end
 
             # Verifica se existe else
-            if (current?(:else))
+            if current?(:else)
                 _if_stmt.set_else else_stmt
             end
 
             return _if_stmt
         end
 
-        assignment
+        var_declaration
     end
 
-    def assignment
+    def var_declaration
         while current?(:let)
             consume()
 
+            _mutable = false
+            _type    = nil
+            _expr    = nil
+
+            if current?(:mut)
+                _mutable = true
+
+                consume()
+            end
+
             if !current?(:identifier)
-                puts "Expected identifier"
+                puts "Expected identifier in variable declaration!"
 
                 return print_stmt
             end
 
-            identifier = consume()
+            _identifier = consume()
 
-            if !current?(:equal)
-                puts "Expected assignment operation"
+            if !current?(:colon)
+                puts "Expected type definition of variable"
 
                 return print_stmt
             end
 
-            assignment_op = consume()
+            consume()
 
-            return AssignmentStmt.new(identifier, assignment_op, expression())
+            if !current?(:identifier)
+                puts "Expected type definition of variable"
+
+                return print_stmt
+            end
+
+            _type = consume()
+
+            if current?(:equal)
+                consume()
+
+                _expr = expression()
+            end
+
+            return VariableDeclarationStmt.new(_mutable, _identifier, _type, _expr)
         end
 
         print_stmt
@@ -184,11 +218,29 @@ class Parser
 
     def print_stmt
         if !current?(:print)
-            return expression()
+            return assignment
         end
 
         consume()
         return PrintStmt.new(expression())
+    end
+
+    def assignment
+        if !current?(:identifier)
+            return expression
+        end
+
+        identifier = consume()
+
+        if !current?(:equal)
+            puts "Expected assignment operation on redeclaration"
+
+            return expression
+        end
+
+        assignment_op = consume()
+
+        return AssignmentStmt.new(identifier, assignment_op, expression())
     end
 
     def expression
