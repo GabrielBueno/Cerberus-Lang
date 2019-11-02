@@ -23,4 +23,8 @@ class Token
     def to_s
         lexeme
     end
+
+    def type?(type)
+        @type == type 
+    end
 end

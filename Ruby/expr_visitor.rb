@@ -17,47 +17,53 @@ class ExprVisitor
 end
 
 class ExprEvaluator < ExprVisitor
+    def initialize(machine=nil)
+        @machine = machine
+    end
+
     def visit_binary(expr)
-        _result = 0
+        _result  = 0
+        _handler = VariableHandler.new
 
         _left_evaluated  = expr.left.accept(self)
         _right_evaluated = expr.right.accept(self)
 
         case expr.operator.type
         when :plus
-            _result = _left_evaluated + _right_evaluated
+            _result = _handler.add(_left_evaluated, _right_evaluated)
         when :minus
-            _result = _left_evaluated - _right_evaluated
+            _result = _handler.sub(_left_evaluated, _right_evaluated)
         when :star
-            _result = _left_evaluated * _right_evaluated
+            _result = _handler.mult(_left_evaluated, _right_evaluated)
         when :slash
-            _result = _left_evaluated / _right_evaluated
+            _result = _handler.div(_left_evaluated, _right_evaluated)
 
         when :equal_equal
-            _result = _left_evaluated == _right_evaluated
+            _result = _handler.equal(_left_evaluated, _right_evaluated)
         when :not_equal
-            _result = _left_evaluated != _right_evaluated
+            _result = _handler.not_equal(_left_evaluated, _right_evaluated)
         when :greater
-            _result = _left_evaluated > _right_evaluated
+            _result = _handler.greater(_left_evaluated, _right_evaluated)
         when :greater_equal
-            _result = _left_evaluated >= _right_evaluated
+            _result = _handler.greater_equal(_left_evaluated, _right_evaluated)
         when :lesser
-            _result = _left_evaluated < _right_evaluated
+            _result = _handler.lesser(_left_evaluated, _right_evaluated)
         when :lesser_equal
-            _result = _left_evaluated <= _right_evaluated
+            _result = _handler.lesser_equal(_left_evaluated, _right_evaluated)
         end
 
         _result
     end
 
     def visit_unary(expr)
-        _result = expr.expression.accept(self)
+        _result  = expr.expression.accept(self)
+        _handler = VariableHandler.new
 
         case expr.operator.type
         when :minus
-            _result = -_result
+            _result = _handler.minus(_result)
         when :not
-            _result = !_result
+            _result = _handler.not(_result)
         end
 
         _result
@@ -68,6 +74,19 @@ class ExprEvaluator < ExprVisitor
     end
 
     def visit_literal(expr)
-        expr.token.lexeme.to_f
+        if expr.token.type? :identifier
+            _variable = @machine.get_variable expr.token.lexeme
+
+            puts @memory
+
+            if _variable == nil
+                puts "Undefined variable #{expr.token.lexeme} referenced on line #{expr.token.line} and column #{expr.token.column}"
+                exit
+            end
+
+            return _variable
+        end
+
+        return Variable.from_token expr.token
     end
 end
