@@ -4,6 +4,7 @@ require_relative "stmt.rb"
 require_relative "parser.rb"
 require_relative "expr_visitor.rb"
 require_relative "variable.rb"
+require_relative "variable_handler.rb"
 require_relative "cerberus_machine.rb"
 require_relative "cerberus_utils.rb"
 

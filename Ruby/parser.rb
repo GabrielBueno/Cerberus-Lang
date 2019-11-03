@@ -54,7 +54,7 @@ private
 
     def while_stmt
         if !current?(:while)
-            return if_stmt
+            return for_stmt
         end
 
         consume()
@@ -114,6 +114,63 @@ private
         _block = block
 
         IfStmt::Elif.new _expression, _block
+    end
+
+    def for_stmt
+        _initial_statement = nil
+        _expression        = nil
+        _loop_statement    = nil
+        _block             = nil
+
+        if !current? :for
+            return if_stmt
+        end
+
+        consume()
+
+        # Verifica o parênteses de abertura
+        if !current?(:left_paren)
+            add_error "Expected opening parentheses in for statement!"
+            return assignment
+        end
+
+        # Elimina o parênteses de abertura
+        consume()
+
+        _initial_statement = var_declaration
+        
+        # Semicolon
+        if !current?(:semicolon)
+            add_error "Expected ';' on for statement!"
+            return assignment
+        end
+
+        consume()
+
+        _expression = expression()
+
+        # Semicolon
+        if !current?(:semicolon)
+            add_error "Expected ';' on for statement!"
+            return assignment
+        end
+
+        consume()
+
+        _loop_statement = assignment
+
+        # Verifica o parênteses de fechamento
+        if !current?(:right_paren)
+            add_error "Expected closing parentheses in for statement!"
+            return assignment
+        end
+
+        # Elimina o parênteses de fechamento
+        consume()
+
+        _block = block
+
+        ForStmt.new _initial_statement, _expression, _loop_statement, _block
     end
 
     def else_stmt

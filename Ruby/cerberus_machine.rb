@@ -54,8 +54,8 @@ class CerberusMachine
 
         _variable.receive_variable assignment_stmt.expr.accept(@expr_eval)
 
-        if _variable_declared.has_error?
-            puts _variable_declared.error
+        if _variable.has_error?
+            puts _variable.error
             exit
         end
 
@@ -98,6 +98,19 @@ class CerberusMachine
         while while_stmt.expr.accept(@expr_eval).truthy?
             run_block while_stmt.block
         end
+    end
+
+    def visit_for(for_stmt)
+        # O for será transformado em um while, e jogado dentro de um bloco, para manter o escopo da variável declarada inicialmente
+        _for_subblock     = Block.new
+        _translated_while = WhileStmt.new for_stmt.expression, for_stmt.block
+
+        _translated_while.block.add_stmt for_stmt.loop_statement
+
+        _for_subblock.add_stmt for_stmt.initial_statement
+        _for_subblock.add_stmt _translated_while
+
+        run_block _for_subblock
     end
 
     def get_variable(identifier)

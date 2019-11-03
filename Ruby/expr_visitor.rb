@@ -77,8 +77,6 @@ class ExprEvaluator < ExprVisitor
         if expr.token.type? :identifier
             _variable = @machine.get_variable expr.token.lexeme
 
-            puts @memory
-
             if _variable == nil
                 puts "Undefined variable #{expr.token.lexeme} referenced on line #{expr.token.line} and column #{expr.token.column}"
                 exit

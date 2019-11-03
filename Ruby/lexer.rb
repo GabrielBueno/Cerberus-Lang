@@ -31,7 +31,8 @@ class Lexer
             "elif"    => :elif,
             "print"   => :print,
             "while"   => :while,
-            "mut"     => :mut
+            "mut"     => :mut,
+            "for"     => :for
         }
     end
 

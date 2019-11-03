@@ -157,6 +157,24 @@ class WhileStmt
     end
 end
 
+class ForStmt
+    attr_accessor :initial_statement
+    attr_accessor :expression
+    attr_accessor :loop_statement
+    attr_accessor :block
+
+    def initialize(initial_statement, expression, loop_statement, block)
+        @initial_statement = initial_statement
+        @expression        = expression
+        @loop_statement    = loop_statement
+        @block             = block
+    end
+
+    def accept(visitor)
+        visitor.visit_for(self)
+    end
+end
+
 class Block
     attr_accessor :stmts
 

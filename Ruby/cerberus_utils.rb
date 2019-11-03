@@ -37,6 +37,10 @@ class AstPrinterVisitor < ExprVisitor
         _pretty
     end
 
+    def visit_for(stmt)
+        "for #{stmt.initial_statement.accept(self)} while #{stmt.expression.accept(self)} make #{stmt.loop_statement.accept(self)} with #{stmt.block.accept(self)}"
+    end
+
     def visit_else(stmt)
         "else #{stmt.block.accept(self)}"
     end

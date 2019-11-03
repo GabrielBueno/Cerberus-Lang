@@ -7,25 +7,28 @@ inteiro ::= digito+
 decimal ::= inteiro ("." inteiro+)*
 numero  ::= inteiro | decimal
 
+programa   ::= declaracao+
+declaracao ::= assignment_stmt | if_stmt | statement
+
+statement ::= expressao | print
+
+assignment_stmt ::= "let" identificador ("=" expressao) ";"
+print ::= "print" expressao ";"
+
 identificador ::= ("_" | letra) ("_" | alfanumerico)*
 
+bloco ::= "{" declaracao* "}" | declaracao
 
-expressao ::= booleano
-booleano  ::= soma (("==" | "!=" | ">" | ">=" | "<=" | "<") soma)*
+if   ::= "if"   "(" expressao ")" bloco
+else ::= "else" "(" expressao ")" bloco
+elif ::= "elif" "(" expressao ")" bloco
+
+if_stmt    ::= if elif* else?
+while_stmt ::= "while (" expressao ")" bloco
+for_stmt   ::= "for (" declaracao ";" expressao ";" declaracao ")" bloco
+
+expressao ::= soma
 soma      ::= termo ([+-] termo)*
 termo     ::= fator ([*/] fator)*
 fator     ::= unario | "(" expressao ")"
-unario    ::= ("-" | "!") digito
-
-
-declaracao_variavel ::= "let" ("mut")? identificador ":" identificador ("=" expressao)? ";"
-redeclaracao ::= identificador "=" expressao ";"
-
-print ::= "print" expressao ";"
-
-se ::= "if" "(" expressao ")" bloco
-
-programa   ::= declaracao+
-declaracao ::= (declaracao_variavel | print | redeclaracao)
-
-bloco ::= "{" programa "}"
+unario    ::= ("-") digito
