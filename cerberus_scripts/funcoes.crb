@@ -2,4 +2,10 @@ func quad(i: int): int {
     return i*i
 }
 
-quad(5)
+func fat(n: u32): u32 {
+    if (n <= 2) { return n }
+
+    return n * fat(n - 1)
+}
+
+quad(5 * 3 + teste) + 5

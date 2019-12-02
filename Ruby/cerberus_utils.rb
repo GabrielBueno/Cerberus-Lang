@@ -80,7 +80,11 @@ class AstPrinterVisitor < ExprVisitor
     end
 
     def visit_func_call(stmt)
-        "func_call not implemented"
+        _arg_list = ""
+
+        stmt.arguments.each {|expr| _arg_list += expr.accept(self) + ", " }
+
+        "call #{stmt.identifier} (#{_arg_list})"
     end
 
     def visit_program(stmt)

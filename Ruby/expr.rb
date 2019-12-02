@@ -46,6 +46,24 @@ class GroupingExpr
     end
 end
 
+class FuncCallExpr
+    attr_accessor :identifier
+    attr_accessor :arguments
+
+    def initialize(identifier, arguments = [])
+        @identifier = identifier
+        @arguments  = arguments
+    end
+
+    def add_arg(expression)
+        @arguments.push(expression)
+    end
+
+    def accept(visitor)
+        visitor.visit_func_call(self)
+    end
+end
+
 class LiteralExpr
     attr_accessor :token
 

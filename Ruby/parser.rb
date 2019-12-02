@@ -356,18 +356,11 @@ private
     end
 
     def assignment
-        if !current?(:identifier)
+        if !current?(:identifier) || !next_token?(:equal)
             return return_stmt
         end
 
-        identifier = consume()
-
-        if !current?(:equal)
-            add_error "Expected assignment operation on redeclaration of variable '#{identifier}'"
-
-            return expression_stmt
-        end
-
+        identifier    = consume()
         assignment_op = consume()
 
         return AssignmentStmt.new(identifier, assignment_op, expression())
@@ -441,16 +434,38 @@ private
     def unary
         if current?(:minus) || current?(:not)
             _operator = consume()
-            return UnaryExpr.new(_operator, literal())
-        else
-            return literal()
+            return UnaryExpr.new(_operator, func_call())
         end
+
+        return func_call()
     end
 
-    def literal
-        _operator = consume()
+    def func_call
+        _literal = consume()
 
-        LiteralExpr.new _operator
+        if current?(:left_paren)
+            _args_list = []
+
+            consume()
+
+            while !current?(:right_paren)
+                _args_list.push(expression())
+
+                if !current?(:comma) && !current?(:right_paren)
+                    add_error("Vírgula de separação dos argumentos esperada em execução de função")
+
+                    return func_stmt
+                elsif current?(:comma)
+                    consume()
+                end
+            end
+
+            consume()
+
+            return FuncCallExpr.new _literal, _args_list
+        end
+
+        LiteralExpr.new _literal
     end
 
     def move_forward
@@ -479,7 +494,7 @@ private
     end
 
     def next_token?(type)
-        next_token().type == type
+        next_token() != nil && next_token().type == type
     end
 
     def previous

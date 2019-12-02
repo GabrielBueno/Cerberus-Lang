@@ -223,20 +223,6 @@ class FuncStmt
     end
 end
 
-class FuncCallStmt
-    attr_accessor :identifier
-    attr_accessor :arguments
-
-    def initialize(identifier, arguments)
-        @identifier = identifier
-        @arguments  = arguments
-    end
-
-    def accept(visitor)
-        visitor.visit_func_call(self)
-    end
-end
-
 class Block
     attr_accessor :stmts
 
