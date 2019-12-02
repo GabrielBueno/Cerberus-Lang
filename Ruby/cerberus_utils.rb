@@ -37,6 +37,10 @@ class AstPrinterVisitor < ExprVisitor
         _pretty
     end
 
+    def visit_expr(stmt)
+        "expr #{stmt.expr.accept(self)}"
+    end
+
     def visit_for(stmt)
         "for #{stmt.initial_statement.accept(self)} while #{stmt.expression.accept(self)} make #{stmt.loop_statement.accept(self)} with #{stmt.block.accept(self)}"
     end
@@ -55,6 +59,28 @@ class AstPrinterVisitor < ExprVisitor
 
     def visit_var_declaration(stmt)
         "let #{stmt.identifier.lexeme} type #{stmt.type.lexeme} mut #{stmt.mutable} with value #{stmt.expr.accept(self) if stmt.expr != nil}"
+    end
+
+    def visit_return(stmt)
+        "returning #{stmt.expression.accept(self)}"
+    end
+
+    def visit_param_decl(stmt)
+        "#{stmt.identifier} with type #{stmt.type}"
+    end
+
+    def visit_func(stmt)
+        _output = "decl func #{stmt.identifier} returning #{stmt.return_type} with params\n\n"
+
+        stmt.parameters.each { |param| _output += param.accept(self) + "\n" }
+
+        _output += "\nwith block\n#{stmt.block.accept(self)}\n\n"
+
+        _output
+    end
+
+    def visit_func_call(stmt)
+        "func_call not implemented"
     end
 
     def visit_program(stmt)

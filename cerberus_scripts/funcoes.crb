@@ -1,0 +1,5 @@
+func quad(i: int): int {
+    return i*i
+}
+
+quad(5)

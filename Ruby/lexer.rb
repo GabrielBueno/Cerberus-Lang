@@ -32,7 +32,9 @@ class Lexer
             "print"   => :print,
             "while"   => :while,
             "mut"     => :mut,
-            "for"     => :for
+            "for"     => :for,
+            "func"    => :func,
+            "return"  => :return
         }
     end
 
@@ -121,6 +123,8 @@ private
                 add_token(:colon, ":")
             when ";"
                 add_token(:semicolon, ";")
+            when ","
+                add_token(:comma, ",")
 
             when "\""
                 add_string()

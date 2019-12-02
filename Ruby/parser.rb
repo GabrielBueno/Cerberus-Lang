@@ -21,7 +21,7 @@ private
     def program
         _program = ProgramStmt.new
 
-        _program.add_stmt(while_stmt()) while !ended?
+        _program.add_stmt(func_stmt()) while !ended?
 
         _program
     end
@@ -52,6 +52,71 @@ private
         _block
     end
 
+    def func_stmt
+        _param_list = []
+
+        if !current?(:func)
+            return while_stmt
+        end
+
+        consume()
+
+        _func_identifier = consume()
+
+        if !current?(:left_paren)
+            add_error("Parênteses de abertura esperado em delcaração de função")
+
+            return while_stmt
+        end
+
+        consume()
+
+        while !current?(:right_paren)
+            if ended?()
+                add_error("Esperado fechamento de lista de parâmetros em declaração de função")
+
+                return nil
+            end
+
+            _param_identifier = consume()
+
+            if (!current?(:colon))
+                add_error("Tipo do parâmetro esperado!")
+
+                return while_stmt
+            end
+
+            consume()
+
+            _param_type = consume()
+
+            _param_list.push(ParameterDeclaration.new(_param_identifier, _param_type))
+
+            if (!current?(:right_paren) && !current?(:comma))
+                add_error("Vírgula de separação dos parâmetros esperada em declaração de função")
+
+                return while_stmt
+            elsif (current?(:comma))
+                consume()
+            end
+        end
+
+        consume()
+
+        if (!current?(:colon))
+            add_error("Definição do tipo do retorno esperado em declaração de função")
+
+            return while_stmt
+        end
+
+        consume()
+
+        _func_return_type = consume()
+        _func_block       = block()
+
+        return FuncStmt.new(_func_identifier, _func_return_type, _func_block, _param_list)
+    end
+
     def while_stmt
         if !current?(:while)
             return for_stmt
@@ -60,7 +125,7 @@ private
         consume()
 
         if !current?(:left_paren)
-            add_error("Expected opening parentheses in while statement!")
+            add_error("Parênteses de abertura esperado em while!")
 
             return if_stmt
         end
@@ -70,7 +135,7 @@ private
         _expression = expression
 
         if !current?(:right_paren)
-            add_error("Expected closing parentheses in while statement!")
+            add_error("Parênteses de fechamento esperado em while!")
 
             return if_stmt
         end
@@ -292,7 +357,7 @@ private
 
     def assignment
         if !current?(:identifier)
-            return expression_stmt
+            return return_stmt
         end
 
         identifier = consume()
@@ -306,6 +371,16 @@ private
         assignment_op = consume()
 
         return AssignmentStmt.new(identifier, assignment_op, expression())
+    end
+
+    def return_stmt
+        if !current?(:return)
+            return expression_stmt
+        end
+
+        consume()
+
+        return ReturnStmt.new expression
     end
 
     def expression_stmt

@@ -175,6 +175,68 @@ class ForStmt
     end
 end
 
+class ReturnStmt
+    attr_accessor :expression
+
+    def initialize(expression)
+        @expression = expression
+    end
+
+    def accept(visitor)
+        visitor.visit_return(self)
+    end
+end
+
+class ParameterDeclaration
+    attr_accessor :identifier
+    attr_accessor :type
+
+    def initialize(identifier, type)
+        @identifier = identifier
+        @type       = type
+    end
+
+    def accept(visitor)
+        visitor.visit_param_decl(self)
+    end
+end
+
+class FuncStmt
+    attr_accessor :identifier
+    attr_accessor :parameters
+    attr_accessor :return_type
+    attr_accessor :block
+
+    def initialize(identifier, return_type, block, parameters = [])
+        @identifier  = identifier
+        @return_type = return_type
+        @block       = block
+        @parameters  = parameters
+    end
+
+    def add_param(identifier, type)
+        @parameters.push(ParameterDeclaration.new(identifier, type))
+    end
+
+    def accept(visitor)
+        visitor.visit_func(self)
+    end
+end
+
+class FuncCallStmt
+    attr_accessor :identifier
+    attr_accessor :arguments
+
+    def initialize(identifier, arguments)
+        @identifier = identifier
+        @arguments  = arguments
+    end
+
+    def accept(visitor)
+        visitor.visit_func_call(self)
+    end
+end
+
 class Block
     attr_accessor :stmts
 

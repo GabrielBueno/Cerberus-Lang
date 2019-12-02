@@ -66,8 +66,22 @@ def exec_file
     machine.run()
 end
 
+def test_file
+    return if not ARGV[0]
+
+    file  = File.open(ARGV[0])
+    lexer = Lexer.new file.read.chomp
+
+    Printer.print_tokens lexer.tokens
+
+    parser = Parser.new lexer.tokens
+    ast    = parser.parse
+
+    puts ast.accept(AstPrinterVisitor.new)
+end
+
 if ARGV[0] 
-    exec_file
+    ARGV[1] == "--test" ? test_file : exec_file
 else
     repl
 end

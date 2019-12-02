@@ -1,0 +1,39 @@
+letra  ::= [a-zA-Z]
+digito ::= [0-9]
+
+alfanumerico ::= letra | digito
+
+inteiro ::= digito+
+decimal ::= inteiro ("." inteiro+)*
+numero  ::= inteiro | decimal
+
+programa   ::= declaracao+
+declaracao ::= assignment_stmt | if_stmt | statement
+
+statement ::= expressao | print
+
+assignment_stmt ::= "let" identificador ("=" expressao) ";"
+print ::= "print" expressao ";"
+
+identificador ::= ("_" | letra) ("_" | alfanumerico)*
+
+bloco ::= "{" declaracao* "}" | declaracao
+
+if   ::= "if"   "(" expressao ")" bloco
+else ::= "else" "(" expressao ")" bloco
+elif ::= "elif" "(" expressao ")" bloco
+
+if_stmt    ::= if elif* else?
+while_stmt ::= "while (" expressao ")" bloco
+for_stmt   ::= "for (" declaracao ";" expressao ";" declaracao ")" bloco
+
+argument_list    ::= (identificador ":" identificador)*
+func_declaration ::= "func " identificador "(" argument_list "): " identificador bloco
+func_call        ::= identificador "(" (identificador | expressao)* ")"
+return_call      ::= "return" expressao
+
+expressao ::= soma
+soma      ::= termo ([+-] termo)*
+termo     ::= fator ([*/] fator)*
+fator     ::= unario | "(" expressao ")"
+unario    ::= ("-")? digito+ | identificador | func_call
