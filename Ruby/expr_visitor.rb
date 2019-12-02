@@ -73,6 +73,11 @@ class ExprEvaluator < ExprVisitor
         expr.expression.accept(self)
     end
 
+    def visit_func_call(expr)
+        # puts(expr.arguments)
+        @machine.run_func(expr.identifier, expr.arguments)
+    end
+
     def visit_literal(expr)
         if expr.token.type? :identifier
             _variable = @machine.get_variable expr.token.lexeme

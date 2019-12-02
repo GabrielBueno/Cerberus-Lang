@@ -36,6 +36,12 @@ class VariableDeclarationStmt < Stmt
     end
 end
 
+class ArgumentDeclarationStmt < VariableDeclarationStmt
+    def initialize(identifier, type, expr)
+        super(false, identifier, type, expr)
+    end
+end
+
 # Declaração de variável
 class AssignmentStmt < Stmt
     attr_accessor :assignment_op
@@ -237,4 +243,7 @@ class Block
     def accept(visitor)
         visitor.visit_block(self)
     end
+end
+
+class FuncExecBlock < Block
 end

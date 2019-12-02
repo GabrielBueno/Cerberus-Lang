@@ -1,19 +1,25 @@
 class CerberusMachine
     attr_accessor :program
     attr_accessor :memory
+    attr_accessor :functions
     attr_accessor :super_scope
 
     def initialize(program, super_scope=nil)
         @program     = program
         @super_scope = super_scope
-        @memory      = {}
         @expr_eval   = ExprEvaluator.new self
+        @memory      = {}
+        @functions   = {}
     end
 
     def run
         program.stmts.each do |stmt|
-            stmt.accept(self)
+            cmd_result = stmt.accept(self)
+
+            return cmd_result if stmt.is_a? ReturnStmt
         end
+
+        return nil
     end
 
     def visit_print(print_stmt)
@@ -21,7 +27,7 @@ class CerberusMachine
     end
 
     def visit_var_declaration(let_stmt)
-        if (get_variable(let_stmt.identifier.lexeme) != nil)
+        if (!let_stmt.is_a?(ArgumentDeclarationStmt) && get_variable(let_stmt.identifier.lexeme) != nil)
             puts "Variable '#{let_stmt.identifier.lexeme}' already defined in scope"
             exit
         end
@@ -60,6 +66,10 @@ class CerberusMachine
         end
 
         # print_memory()
+    end
+
+    def visit_return(return_stmt)
+        return_stmt.expression.accept(@expr_eval)
     end
 
     def visit_expr(expr_stmt)
@@ -113,8 +123,49 @@ class CerberusMachine
         run_block _for_subblock
     end
 
-    def get_variable(identifier)
-        @memory[identifier] || (super_scope.get_variable(identifier) if super_scope != nil)
+    def visit_func(func_stmt)
+        if get_function(func_stmt.identifier) != nil
+            puts "Função '#{func_stmt.identifier}' já declarada anteriormente"
+            exit
+        end
+
+        add_function func_stmt
+        # print_functions
+    end
+
+    def run_func(func_identifier, arg_list) 
+        _func            = get_function(func_identifier.lexeme)
+        _func_exec_block = FuncExecBlock.new
+
+        if _func == nil
+            puts "Função '#{func_identifier}' inexistente"
+            exit
+        end
+
+        if _func.parameters.length != arg_list.length
+            puts "Número de argumentos passados para a função é inválido"
+            exit
+        end
+
+        for i in 0..(arg_list.length - 1) do
+            _param = _func.parameters[i]
+            _arg   = arg_list[i]
+            _arg_token = Token.new :identifier, arg_var_decl_name(_param.identifier)
+
+            _func_exec_block.add_stmt ArgumentDeclarationStmt.new _arg_token, _param.type, _arg
+        end
+
+        _func_exec_block.stmts.concat _func.block.stmts
+
+        run_func_block _func_exec_block
+    end
+
+    def get_variable(identifier, search_super_scope = true)
+        @memory[identifier] || @memory[arg_var_decl_name(identifier)] || (super_scope.get_variable(identifier) if super_scope != nil && search_super_scope)
+    end
+
+    def get_function(identifier, search_super_scope = true)
+        @functions[identifier] || (super_scope.get_function(identifier) if super_scope != nil && search_super_scope)
     end
 
 private
@@ -125,8 +176,28 @@ private
         sub_scope.run()
     end
 
+    def run_func_block(block)
+        block.stmts.each do |stmt|
+            if stmt.is_a? Block
+                return run_func_block(stmt)
+            end
+
+            cmd_result = stmt.accept(self)
+
+            return cmd_result if stmt.is_a? ReturnStmt
+        end
+    end
+
+    def arg_var_decl_name(var_name)
+        "___arg__#{var_name}___"
+    end
+
     def add_variable(identifier, variable)
         @memory[identifier] = variable
+    end
+
+    def add_function(func)
+        @functions[func.identifier.lexeme] = func
     end
 
     def print_memory
@@ -134,6 +205,16 @@ private
 
         @memory.each do |key, value|
             puts "#{key} => #{value.value}"
+        end
+
+        puts ""
+    end
+
+    def print_functions
+        puts "Functions...\n"
+
+        @functions.each do |key, value|
+            puts "#{key} => #{value}"
         end
 
         puts ""
