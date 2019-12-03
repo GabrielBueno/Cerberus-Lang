@@ -4,9 +4,10 @@ class CerberusMachine
     attr_accessor :functions
     attr_accessor :super_scope
 
-    def initialize(program, super_scope=nil)
+    def initialize(program, super_scope=nil, parent_func=nil)
         @program     = program
         @super_scope = super_scope
+        @parent_func = parent_func
         @expr_eval   = ExprEvaluator.new self
         @memory      = {}
         @functions   = {}
@@ -14,9 +15,13 @@ class CerberusMachine
 
     def run
         program.stmts.each do |stmt|
+            return @parent_func.call_return(@parent_func.returned_val) if @parent_func != nil && @parent_func.has_returned
+
             cmd_result = stmt.accept(self)
 
-            return cmd_result if stmt.is_a? ReturnStmt
+            if stmt.is_a? ReturnStmt
+                return @parent_func.call_return(cmd_result) 
+            end
         end
 
         return nil
@@ -124,71 +129,47 @@ class CerberusMachine
     end
 
     def visit_func(func_stmt)
-        if get_function(func_stmt.identifier) != nil
+        if get_function(func_stmt.identifier.lexeme) != nil
             puts "Função '#{func_stmt.identifier}' já declarada anteriormente"
             exit
         end
 
-        add_function func_stmt
+        add_function FunctionMachine.new func_stmt.identifier.lexeme, func_stmt.parameters, func_stmt.return_type, func_stmt.block
         # print_functions
     end
 
-    def run_func(func_identifier, arg_list) 
-        _func            = get_function(func_identifier.lexeme)
-        _func_exec_block = FuncExecBlock.new
+    def call_func(func_identifier, arg_list) 
+        _func = get_function(func_identifier)
 
         if _func == nil
             puts "Função '#{func_identifier}' inexistente"
             exit
         end
 
-        if _func.parameters.length != arg_list.length
-            puts "Número de argumentos passados para a função é inválido"
-            exit
-        end
-
-        for i in 0..(arg_list.length - 1) do
-            _param = _func.parameters[i]
-            _arg   = arg_list[i]
-            _arg_token = Token.new :identifier, arg_var_decl_name(_param.identifier)
-
-            _func_exec_block.add_stmt ArgumentDeclarationStmt.new _arg_token, _param.type, _arg
-        end
-
-        _func_exec_block.stmts.concat _func.block.stmts
-
-        run_func_block _func_exec_block
+        run_func(_func.copy(), arg_list)
     end
 
     def get_variable(identifier, search_super_scope = true)
-        @memory[identifier] || @memory[arg_var_decl_name(identifier)] || (super_scope.get_variable(identifier) if super_scope != nil && search_super_scope)
+        @memory[identifier] || @memory[CerberusMachine.arg_var_decl_name(identifier)] || (@super_scope.get_variable(identifier) if @super_scope != nil && search_super_scope)
     end
 
     def get_function(identifier, search_super_scope = true)
-        @functions[identifier] || (super_scope.get_function(identifier) if super_scope != nil && search_super_scope)
+        @functions[identifier] || (@super_scope.get_function(identifier) if @super_scope != nil && search_super_scope)
     end
 
 private
     def run_block(block)
         block_program = ProgramStmt.new block.stmts
-        sub_scope     = CerberusMachine.new block_program, self
+        sub_scope     = CerberusMachine.new block_program, self, @parent_func
 
         sub_scope.run()
     end
 
-    def run_func_block(block)
-        block.stmts.each do |stmt|
-            if stmt.is_a? Block
-                return run_func_block(stmt)
-            end
-
-            cmd_result = stmt.accept(self)
-
-            return cmd_result if stmt.is_a? ReturnStmt
-        end
+    def run_func(func, arg_list)
+        func.run(arg_list, self)
     end
 
-    def arg_var_decl_name(var_name)
+    def self.arg_var_decl_name(var_name)
         "___arg__#{var_name}___"
     end
 
@@ -197,7 +178,7 @@ private
     end
 
     def add_function(func)
-        @functions[func.identifier.lexeme] = func
+        @functions[func.identifier] = func
     end
 
     def print_memory

@@ -6,6 +6,7 @@ require_relative "expr_visitor.rb"
 require_relative "variable.rb"
 require_relative "variable_handler.rb"
 require_relative "cerberus_machine.rb"
+require_relative "function.rb"
 require_relative "cerberus_utils.rb"
 
 def test
