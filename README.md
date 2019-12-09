@@ -32,12 +32,8 @@ string: cadeia de caracteres
 let x: u8 = 5     (constante)
 
 let mut x: u8 = 5 (variável, pode ser redefinida)
-```
 
-**Redefinição de variáveis mutáveis**
-
-```
-x = 6
+x = 6 (redefinição de variável mutável)
 ```
 
 **Declaração de função**
