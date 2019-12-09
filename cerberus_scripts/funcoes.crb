@@ -10,6 +10,18 @@ func fat(n: u32): u32 {
     return n * fat(n - 1)
 }
 
+func termial(n: u32): u32 {
+    let mut soma: u32 = 0
+    let mut i: u32 = 1
+
+    while (i <= n) {
+        soma = soma + i
+        i    = i + 1
+    }
+
+    return soma
+}
+
 func primo(n: u32): u8 {
     let mut i: u32 = 2
 
@@ -49,7 +61,13 @@ saudacoes("en")
 saudacoes("sv")
 saudacoes("bla")
 
-print(quad(5))
-print(fat(5))
+print("")
+
+print("quad    = " + quad(5))
+print("fat     = " + fat(5))
+print("termial = " + termial(5))
+
+print("")
+
 exibe_primo(5)
 exibe_primo(4)
