@@ -19,7 +19,7 @@ class CerberusMachine
 
             cmd_result = stmt.accept(self)
 
-            if stmt.is_a? ReturnStmt
+            if stmt.is_a?(ReturnStmt) && @parent_func != nil
                 return @parent_func.call_return(cmd_result) 
             end
         end
@@ -111,6 +111,10 @@ class CerberusMachine
 
     def visit_while(while_stmt)
         while while_stmt.expr.accept(@expr_eval).truthy?
+            if @parent_func != nil
+                return if @parent_func.has_returned
+            end
+
             run_block while_stmt.block
         end
     end

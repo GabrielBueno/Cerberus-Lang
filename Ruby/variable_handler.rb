@@ -75,6 +75,7 @@ class VariableHandler
     ### Subtração
     def sub(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
             set_error "Cannot subtract #{_sub_type.to_s} from #{_dom_type.to_s}"
@@ -88,6 +89,7 @@ class VariableHandler
     ### Multiplicação
     def mult(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
             set_error "Cannot multiply #{_sub_type.to_s} and #{_dom_type.to_s}"
@@ -101,14 +103,27 @@ class VariableHandler
     ### Divisão
     def div(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
-            set_error "Cannote divide #{_sub_type.to_s} and #{_dom_type.to_s}"
+            set_error "Cannot divide #{_sub_type.to_s} and #{_dom_type.to_s}"
             return nil
         end
 
         # Caso contrário, subtração algébrica
         return Variable.constant(_dom_type, first_variable.value / second_variable.value)
+    end
+
+    ### Módulo
+    def module(first_variable, second_variable)
+        _dom_type = dominant_type(first_variable.type, second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
+
+        if (_dom_type == :string)
+            set_error "Cannot resolve module between #{_dom_type.to_s} and #{_sub_type}"
+        end
+
+        return Variable.constant(_dom_type, first_variable.value % second_variable.value)
     end
 
     ### Igualdade
@@ -128,6 +143,7 @@ class VariableHandler
     ### Diferente
     def not_equal(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string && _sub_type != :string) || (_dom_type != :string &&_sub_type == :string)
            set_error "Cannot apply '!=' operation between #{_sub_type.to_s} and #{_dom_type.to_s}"
@@ -141,6 +157,7 @@ class VariableHandler
     ### Maior
     def greater(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
             set_error "Cannot apply '>' operation between #{_sub_type.to_s} and #{_dom_type.to_s}"
@@ -154,6 +171,7 @@ class VariableHandler
     ### Maior ou igual
     def greater_equal(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
             set_error "Cannot apply '>=' operation between #{_sub_type.to_s} and #{_dom_type.to_s}"
@@ -167,6 +185,7 @@ class VariableHandler
     ### Menor
     def lesser(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
             set_error "Cannot apply '<' operation between #{_sub_type.to_s} and #{_dom_type.to_s}"
@@ -180,6 +199,7 @@ class VariableHandler
     ### Menor ou igual
     def lesser_equal(first_variable, second_variable)
         _dom_type = dominant_type(first_variable.type,  second_variable.type)
+        _sub_type = secondary_type(first_variable.type, second_variable.type)
 
         if (_dom_type == :string)
             set_error "Cannot apply '<=' operation between #{_sub_type.to_s} and #{_dom_type.to_s}"

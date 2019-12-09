@@ -43,7 +43,7 @@ private
                 add_error("Expected closing curly brackets!")
             end
 
-            _block.add_stmt(if_stmt())
+            _block.add_stmt(while_stmt())
         end
 
         # Elimina a chave de fechamento
@@ -409,7 +409,7 @@ private
     def term
         _expression = factor()
 
-        while current?(:star) || current?(:slash)
+        while current?(:star) || current?(:slash) || current?(:module)
             _operator   = consume()
             _expression = BinaryExpr.new(_expression, _operator, factor())
         end

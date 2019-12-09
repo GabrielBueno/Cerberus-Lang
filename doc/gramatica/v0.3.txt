@@ -34,6 +34,6 @@ return_call      ::= "return" expressao
 
 expressao ::= soma
 soma      ::= termo ([+-] termo)*
-termo     ::= fator ([*/] fator)*
+termo     ::= fator ([*/%] fator)*
 fator     ::= unario | "(" expressao ")"
 unario    ::= ("-")? digito+ | identificador | func_call

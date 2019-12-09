@@ -10,6 +10,28 @@ func fat(n: u32): u32 {
     return n * fat(n - 1)
 }
 
+func primo(n: u32): u8 {
+    let mut i: u32 = 2
+
+    while (i < n) {
+        if (n % i == 0) { return 0 }
+
+        i = i + 1
+    }
+
+    return 1
+}
+
+func exibe_primo(n: u32): void {
+    let is_primo: u8 = primo(n)
+
+    if (is_primo == 0) {
+        print(n + " nao e primo")
+    } else {
+        print(n + " e primo")
+    }
+}
+
 func saudacoes(lang: string): void { 
     if (lang == "pt") {
         print("Alo mundo!")
@@ -29,3 +51,5 @@ saudacoes("bla")
 
 print(quad(5))
 print(fat(5))
+exibe_primo(5)
+exibe_primo(4)

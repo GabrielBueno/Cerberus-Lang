@@ -86,6 +86,8 @@ private
                 add_token(:star, "*")
             when "/"
                 add_token(:slash, "/")
+            when "%"
+                add_token(:module, "%")
 
             when "="
                 if next_ch?("=")

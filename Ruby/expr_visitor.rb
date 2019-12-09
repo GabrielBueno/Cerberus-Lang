@@ -37,6 +37,8 @@ class ExprEvaluator < ExprVisitor
             _result = _handler.mult(_left_evaluated, _right_evaluated)
         when :slash
             _result = _handler.div(_left_evaluated, _right_evaluated)
+        when :module
+            _result = _handler.module(_left_evaluated, _right_evaluated)
 
         when :equal_equal
             _result = _handler.equal(_left_evaluated, _right_evaluated)
