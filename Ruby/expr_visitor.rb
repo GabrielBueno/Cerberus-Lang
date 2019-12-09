@@ -74,8 +74,11 @@ class ExprEvaluator < ExprVisitor
     end
 
     def visit_func_call(expr)
-        # puts(expr.arguments)
-        @machine.run_func(expr.identifier, expr.arguments)
+        _evaluated_args = []
+
+        expr.arguments.each {|arg| _evaluated_args.push(arg.accept(self)) }
+
+        @machine.call_func(expr.identifier.lexeme, _evaluated_args)
     end
 
     def visit_literal(expr)
