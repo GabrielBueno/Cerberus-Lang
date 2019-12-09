@@ -3,9 +3,29 @@ func quad(i: int): int {
 }
 
 func fat(n: u32): u32 {
-    if (n <= 2) { return n }
-
+    if (n <= 2) { 
+        return n 
+    }
+    
     return n * fat(n - 1)
 }
 
-quad(5 * 3 + teste) + 5
+func saudacoes(lang: string): void { 
+    if (lang == "pt") {
+        print("Alo mundo!")
+    } elif (lang == "en") {
+        print("Hello world!")
+    } elif(lang == "sv") {
+        print("Hej vaerlden!")
+    } else {
+        print("Saluton mondo!")
+    }
+}
+
+saudacoes("pt")
+saudacoes("en")
+saudacoes("sv")
+saudacoes("bla")
+
+print(quad(5) + 5)
+print(fat(5))
